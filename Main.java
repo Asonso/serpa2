@@ -26,7 +26,7 @@ public class Main {
                     GerirTorneios.mostrarTorneios();
                     break;
                 case 4:
-                    GerirJogadores.criarJogador(scanner);
+                    GerirJogadores.criarJogador();
                     break;
                 case 5:
                     GerirJogadores.modificarJogador(scanner);

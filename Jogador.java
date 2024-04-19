@@ -9,9 +9,10 @@ public class Jogador {
     private int jogos;
     private int vitorias;
     private int derrotas;
+    private static int ultimoId = 0;
 
-    public Jogador(int id, String nome, int numero, int jogos, int vitorias, int derrotas) {
-        this.id = id;
+    public Jogador(String nome, int numero, int jogos, int vitorias, int derrotas) {
+        this.id = ++ultimoId;
         this.nome = nome;
         this.numero = numero;
         this.desportos = new ArrayList<>();

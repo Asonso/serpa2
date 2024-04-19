@@ -4,7 +4,7 @@
  * @author 79256 Afonso Santos
  */
 
-public enum Desporto {
+ public enum Desporto {
     FUTEBOL,
     BASQUETEBOL,
     TENIS,

@@ -4,7 +4,7 @@
  * @author 79256 Afonso Santos
  */
 
-public class Torneio {
+ public class Torneio {
     private String desporto;
     private String data;
     private String local;
@@ -20,16 +20,14 @@ public class Torneio {
      * @param data      A data de realização do Torneio
      * @param local     Local onde é realizado o Torneio
      * @param numeroEquipas     Número de equipas no torneio
-     * @param elementosPorEquipa        Número de elementos por equipa no torneio
      * @param numeroParticipantes       Número de participantes no torneio    
      * @param tipo      Tipo do torneio     
      */
-    public Torneio(String desporto, String data, String local, int numeroEquipas, int elementosPorEquipa, int numeroParticipantes, String tipo) {
+    public Torneio(String desporto, String data, String local, int numeroEquipas, int numeroParticipantes, String tipo) {
         this.desporto = desporto;
         this.data = data;
         this.local = local;
         this.numeroEquipas = numeroEquipas;
-        this.elementosPorEquipa = elementosPorEquipa;
         this.numeroParticipantes = numeroParticipantes;
         this.tipo = tipo;
     }
@@ -68,15 +66,6 @@ public class Torneio {
      */
     public int getNumeroEquipas() {
         return numeroEquipas;
-    }
-
-     /**
-     * Óbtem O número de elementos das equipas no torneio
-     * 
-     * @return Número de elementos das equipas no torneio
-     */
-    public int getElementosPorEquipa() {
-        return elementosPorEquipa;
     }
 
      /**

@@ -224,7 +224,7 @@
              int numeroTorneio = scanner.nextInt();
              dadosTorneio(numeroTorneio - 1);
          } else {
-             System.out.println("Opção inválida.");
+             System.out.println("Opçao inválida.");
          }
      }
      

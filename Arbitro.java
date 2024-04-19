@@ -7,7 +7,7 @@ public class Arbitro {
     private int numero;
     private List<String> desportos;
 
-    public Abritro(String nome, int numero) {
+    public Arbitro(String nome, int numero) {
         this.id = id;
         this.nome = nome;
         this.numero = numero;

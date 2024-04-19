@@ -20,16 +20,24 @@ public class Jogador {
         this.derrotas = derrotas;
     }
 
-    public int getid(){
+    public int getId() {
         return id;
     }
     
-    public String getNome(){
+    public String getNome() {
         return nome;
     }
 
-    public int getNumero(){
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getNumero() {
         return numero;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
     }
 
     public List<String> getDesportos() {
@@ -42,5 +50,29 @@ public class Jogador {
 
     public void removerDesporto(String desporto) {
         desportos.remove(desporto);
+    }
+
+    public int getJogos() {
+        return jogos;
+    }
+
+    public void setJogos(int jogos) {
+        this.jogos = jogos;
+    }
+
+    public int getVitorias() {
+        return vitorias;
+    }
+
+    public void setVitorias(int vitorias) {
+        this.vitorias = vitorias;
+    }
+
+    public int getDerrotas() {
+        return derrotas;
+    }
+
+    public void setDerrotas(int derrotas) {
+        this.derrotas = derrotas;
     }
 }

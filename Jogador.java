@@ -5,17 +5,17 @@ public class Jogador {
     private int id;
     private String nome;
     private int numero;
-    private List<String> desportos;
+    private List<Desporto> desportos;
     private int jogos;
     private int vitorias;
     private int derrotas;
     private static int ultimoId = 0;
 
-    public Jogador(String nome, int numero, int jogos, int vitorias, int derrotas) {
+    public Jogador(String nome, int numero, List<Desporto> desportos, int jogos, int vitorias, int derrotas) {
         this.id = ++ultimoId;
         this.nome = nome;
         this.numero = numero;
-        this.desportos = new ArrayList<>();
+        this.desportos = desportos;
         this.jogos = jogos;
         this.vitorias = vitorias;
         this.derrotas = derrotas;
@@ -41,15 +41,19 @@ public class Jogador {
         this.numero = numero;
     }
 
-    public List<String> getDesportos() {
-        return desportos;
+    public List<String> getDesportosAsString() {
+        List<String> desportosAsString = new ArrayList<>();
+        for (Desporto desporto : desportos) {
+            desportosAsString.add(desporto.name());
+        }
+        return desportosAsString;
     }
 
-    public void adicionarDesporto(String desporto) {
+    public void adicionarDesporto(Desporto desporto) {
         desportos.add(desporto);
     }
 
-    public void removerDesporto(String desporto) {
+    public void removerDesporto(Desporto desporto) {
         desportos.remove(desporto);
     }
 

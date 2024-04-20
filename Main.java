@@ -35,6 +35,9 @@ public class Main {
                     GerirJogadores.apagarJogador(scanner);
                     break;
                 case 7:
+                    GerirJogadores.mostrarJogadores();
+                    break;
+                case 8:
                     System.out.println("Adeus! (>‿o)");
                     System.exit(0);
                 default:
@@ -54,7 +57,8 @@ public class Main {
         System.out.println("4. Criar Jogador");
         System.out.println("5. Modificar Jogador");
         System.out.println("6. Apagar Jogador");
-        System.out.println("7. Sair");
+        System.out.println("7. Mostrar Jogadores");
+        System.out.println("8. Sair");
         System.out.print("Digite sua escolha: ");
     }
 }

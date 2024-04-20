@@ -5,7 +5,7 @@ public class Arbitro {
     private int id;
     private String nome;
     private int numero;
-    private List<String> desportos;
+    private List<Desporto> desportos;
 
     public Arbitro(String nome, int numero) {
         this.id = id;
@@ -30,11 +30,11 @@ public class Arbitro {
         return desportos;
     }
 
-    public void adicionarDesporto(String desporto) {
+    public void adicionarDesporto(Desporto desporto) {
         desportos.add(desporto);
     }
 
-    public void removerDesporto(String desporto) {
+    public void removerDesporto(Desporto desporto) {
         desportos.remove(desporto);
     }
 }

@@ -5,14 +5,19 @@
  */
 
  public enum Desporto {
-    FUTEBOL,
+    ANDEBOL,
+    BADMINTON,
+    BASEBOL,
     BASQUETEBOL,
-    TENIS,
-    PINGPONG,
-    VOLEIBOL,
-    NATACAO,
-    CORRIDA,
-    XADREZ,
-    WRESTLING,
     BOXING,
+    CORRIDA,
+    FUTEBOL,
+    GOLF,
+    NATACAO,
+    PINGPONG,
+    SURF,
+    TENIS,
+    VOLEIBOL,
+    WRESTLING,
+    XADREZ
 }

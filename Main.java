@@ -2,11 +2,6 @@ import java.util.Scanner;
 
 public class Main {
 
-    /**
-     * Método principal que inicia o programa de gerenciamento de torneios.
-     * 
-     * @param args Argumentos de linha de comando
-     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -14,6 +9,7 @@ public class Main {
             exibirMenu();
 
             int escolha = scanner.nextInt();
+            scanner.nextLine(); // Limpar o buffer do scanner
 
             switch (escolha) {
                 case 1:
@@ -38,6 +34,12 @@ public class Main {
                     GerirJogadores.mostrarJogadores();
                     break;
                 case 8:
+                    Arbitro.mostrarArbitros();
+                    break;
+                case 9:
+                    mostrarDetalhesArbitro(scanner);
+                    break;
+                case 10:
                     System.out.println("Adeus! (>‿o)");
                     System.exit(0);
                 default:
@@ -46,19 +48,44 @@ public class Main {
         }
     }
 
-    /**
-     * Exibe o menu de opções disponíveis para o usuário.
-     */
-    private static void exibirMenu() {
-        System.out.println("\nMenu:");
-        System.out.println("1. Criar Torneio");
-        System.out.println("2. Apagar Torneios");
-        System.out.println("3. Mostrar Torneios");
-        System.out.println("4. Criar Jogador");
-        System.out.println("5. Modificar Jogador");
-        System.out.println("6. Apagar Jogador");
-        System.out.println("7. Mostrar Jogadores");
-        System.out.println("8. Sair");
-        System.out.print("Digite sua escolha: ");
+    public static void exibirMenu() {
+        System.out.println("\n=== Menu ===");
+        System.out.println("1. Criar torneio");
+        System.out.println("2. Apagar torneios");
+        System.out.println("3. Mostrar torneios");
+        System.out.println("4. Criar jogador");
+        System.out.println("5. Modificar jogador");
+        System.out.println("6. Apagar jogador");
+        System.out.println("7. Mostrar jogadores");
+        System.out.println("8. Mostrar árbitros");
+        System.out.println("9. Mostrar detalhes de um árbitro");
+        System.out.println("10. Sair");
+        System.out.print("Escolha uma opção: ");
+    }
+
+    public static void mostrarDetalhesArbitro(Scanner scanner) {
+        System.out.print("Insira o ID do árbitro: ");
+        int id = scanner.nextInt();
+        scanner.nextLine(); // Limpar o buffer do scanner
+    
+        boolean arbitroEncontrado = false;
+        for (Arbitro arbitro : Arbitro.getArbitros()) {
+            if (arbitro.getId() == id) {
+                System.out.println("\nDetalhes do árbitro:");
+                System.out.println("- ID: " + arbitro.getId());
+                System.out.println("- Nome: " + arbitro.getNome());
+                System.out.println("- Número: " + arbitro.getNumero());
+                System.out.println("- Desportos:");
+                for (Desporto desporto : arbitro.getDesportos()) {
+                    System.out.println("  - " + desporto);
+                }
+                arbitroEncontrado = true;
+                break;
+            }
+        }
+    
+        if (!arbitroEncontrado) {
+            System.out.println("Árbitro não encontrado com o ID fornecido.");
+        }
     }
 }

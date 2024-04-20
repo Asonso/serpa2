@@ -5,6 +5,7 @@
  */
 
  public class Torneio {
+    private int id;
     private String desporto;
     private String data;
     private String local;
@@ -12,6 +13,7 @@
     private int elementosPorEquipa;
     private int numeroParticipantes;
     private String tipo;
+    private static int ultimoId = 0;
     
     /**
      * Construtor da classe Torneio
@@ -24,12 +26,14 @@
      * @param tipo      Tipo do torneio     
      */
     public Torneio(String desporto, String data, String local, int numeroEquipas, int numeroParticipantes, String tipo) {
+        this.id = ++ultimoId;
         this.desporto = desporto;
         this.data = data;
         this.local = local;
         this.numeroEquipas = numeroEquipas;
         this.numeroParticipantes = numeroParticipantes;
         this.tipo = tipo;
+        
     }
 
     /**
@@ -37,6 +41,10 @@
      * 
      * @return O desporto do torneio
      */
+    public int getId() {
+        return id;
+    }
+
     public String getDesporto() {
         return desporto;
     }

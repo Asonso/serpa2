@@ -20,34 +20,50 @@
      /**
       * Apaga um torneio da lista de torneios.
       */
-     public static void apagarTorneios() {
-         Scanner scanner = new Scanner(System.in);
- 
-         if (contadorTorneios == 0) {
-             System.out.println("Nao existem torneios para apagar.");
-             return;
-         }
- 
-         System.out.println("Selecione o torneio que queres apagar:");
- 
-         for (int i = 0; i < contadorTorneios; i++) {
-             System.out.println((i + 1) + ". " + torneios.get(i).getDesporto() + " - " + torneios.get(i).getData());
-         }
- 
-         int escolha = scanner.nextInt();
- 
-         if (escolha >= 1 && escolha <= contadorTorneios) {
-             removerTorneio(escolha - 1);
-             System.out.println("Torneio removido com sucesso.");
-         } else {
-             System.out.println("Esse torneio nao existe.");
-         }
-     }
- 
-     private static void removerTorneio(int indice) {
-         torneios.remove(indice);
-         contadorTorneios--;
-     }
+      public static void apagarTorneios(Scanner scanner) {
+
+        if (torneios.isEmpty()) {
+            System.out.println("Não existem torneios para apagar.");
+            return;
+        }
+
+        while (true) {
+            System.out.println("Insira o ID do torneio que deseja apagar (ou digite 'voltar' para retornar):");
+
+            for (int i = 0; i < torneios.size(); i++) {
+                System.out.println((i + 1) + ". " + torneios.get(i).getDesporto() + " - " + torneios.get(i).getData());
+            }
+
+            String input = scanner.nextLine();
+            
+            if (input.equalsIgnoreCase("voltar")) {
+                System.out.println("Operação cancelada.");
+                return; // Voltar ao menu anterior
+            }
+        
+            try {
+                int id = Integer.parseInt(input);
+                // Verificar se o jogador com o ID especificado existe
+                for (int i = 0; i < torneios.size(); i++) {
+                    if (torneios.get(i).getId() == id) {
+                        System.out.println("Tem certeza que deseja apagar o torneio '" + torneios.get(i).getDesporto() + ", " + torneios.get(i).getData() + "'? (s/n)");
+                        String confirmacao = scanner.nextLine().toLowerCase();
+                        if (confirmacao.equals("s")) {
+                            torneios.remove(i);
+                            System.out.println("Torneio removido com sucesso.");
+                        } else {
+                            System.out.println("Operação cancelada. O torneio não foi removido.");
+                        }
+                        return; // Sai do método após apagar ou cancelar a operação
+                    }
+                }
+                // Se o jogador com o ID especificado não for encontrado
+                System.out.println("Torneio não encontrado.");
+            } catch (NumberFormatException e) {
+                System.out.println("Por favor, insira um ID válido ou 'voltar'.");
+            }
+        }
+    }
  
      /**
       * Cria um novo torneio com base nas informações dadas pelo utilizador.

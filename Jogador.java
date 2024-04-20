@@ -41,6 +41,10 @@ public class Jogador {
         this.numero = numero;
     }
 
+    public List<Desporto> getDesportos() {
+        return this.desportos;
+    }
+    
     public List<String> getDesportosAsString() {
         List<String> desportosAsString = new ArrayList<>();
         for (Desporto desporto : desportos) {

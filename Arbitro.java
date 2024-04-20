@@ -6,12 +6,15 @@ public class Arbitro {
     private String nome;
     private int numero;
     private List<Desporto> desportos;
+    private int jogos;
+    private static int ultimoId = 0;
 
-    public Arbitro(String nome, int numero) {
-        this.id = id;
+    public Arbitro(String nome, int numero, List<Desporto> desportos, int jogos) {
+        this.id = ++ultimoId;
         this.nome = nome;
         this.numero = numero;
-        this.desportos = new ArrayList<>();
+        this.desportos = desportos;
+        this.jogos = jogos;
     }
 
     public int getid(){
@@ -22,12 +25,28 @@ public class Arbitro {
         return nome;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public int getNumero(){
         return numero;
     }
 
-    public List<String> getDesportos() {
-        return desportos;
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
+    public List<Desporto> getDesportos() {
+        return this.desportos;
+    }
+
+    public List<String> getDesportosAsString() {
+        List<String> desportosAsString = new ArrayList<>();
+        for (Desporto desporto : desportos) {
+            desportosAsString.add(desporto.name());
+        }
+        return desportosAsString;
     }
 
     public void adicionarDesporto(Desporto desporto) {
@@ -36,5 +55,13 @@ public class Arbitro {
 
     public void removerDesporto(Desporto desporto) {
         desportos.remove(desporto);
+    }
+
+    public int getJogos() {
+        return jogos;
+    }
+
+    public void setJogos(int jogos) {
+        this.jogos = jogos;
     }
 }

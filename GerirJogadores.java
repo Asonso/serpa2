@@ -14,6 +14,18 @@ public class GerirJogadores {
         return jogadores;
     }
 
+    public static boolean jogadorEstaEmTorneio(Jogador jogador) {
+        // Verifica se o jogador está presente no mainBracket ou no losersBracket de algum torneio
+        for (Torneio torneio : GerirTorneios.getTorneios()) {
+            if (torneio.getMainBracket().contains(jogador) || torneio.getLosersBracket().contains(jogador)) {
+                return true; // O jogador está em algum torneio
+            }
+        }
+        return false; // O jogador não está em nenhum torneio
+    }
+    
+    
+
     public static void criarJogador() {
         Scanner scanner = new Scanner(System.in);
         System.out.println();
@@ -107,6 +119,12 @@ public class GerirJogadores {
                 for (Jogador jogador : jogadores) {
                     if (jogador.getId() == id) {
                         jogadorEncontrado = true;
+
+                        if (jogadorEstaEmTorneio(jogador)) {
+                            System.out.println("Este jogador está associado a um torneio e não pode ser modificado.");
+                            return; // Sai do método sem modificar o jogador
+                        }
+
                         System.out.println();
                         System.out.println("Insira o novo nome do jogador:");
                         String nome = scanner.nextLine();
@@ -208,6 +226,12 @@ public class GerirJogadores {
                 // Verificar se o jogador com o ID especificado existe
                 for (int i = 0; i < jogadores.size(); i++) {
                     if (jogadores.get(i).getId() == id) {
+
+                        if (jogadorEstaEmTorneio(jogadores.get(i))) {
+                            System.out.println("Este jogador está associado a um torneio e não pode ser apagado.");
+                            return; // Sai do método sem apagar o jogador
+                        }
+
                         System.out.println("Tem certeza que deseja apagar o jogador '" + jogadores.get(i).getNome() + "'? (s/n)");
                         String confirmacao = scanner.nextLine().toLowerCase();
                         if (confirmacao.equals("s")) {
@@ -239,6 +263,7 @@ public class GerirJogadores {
             for (Jogador jogador : jogadores) {
                 String desportosAsString = String.join(", ", jogador.getDesportosAsString());
                 System.out.println("(" + jogador.getId() + ") - " + jogador.getNome() + ", Número: " + jogador.getNumero() + ", Pratica: " + desportosAsString);
+                System.out.println("Tem: " + jogador.getVitorias() + " vitorias e " + jogador.getDerrotas() + " derrotas\n");
             }
         }
     }
@@ -272,6 +297,7 @@ public class GerirJogadores {
                     encontrouJogadores = true;
                     String desportosAsString = String.join(", ", jogador.getDesportosAsString());
                     System.out.println("(" + jogador.getId() + ") - " + jogador.getNome() + ", Número: " + jogador.getNumero() + ", Pratica: " + desportosAsString);
+                    System.out.println("Tem: " + jogador.getVitorias() + " vitorias e " + jogador.getDerrotas() + " derrotas\n");
                 }
             }
             if (!encontrouJogadores) {

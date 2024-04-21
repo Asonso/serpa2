@@ -349,10 +349,18 @@ import java.util.Collections;
     
         System.out.println("Número de Participantes: " + torneio.getNumeroParticipantes());
     
-        System.out.println("\nJogadores (Main Bracket):");
-        List<Jogador> mainBracket = torneio.getMainBracket();
-        for (Jogador jogador : mainBracket) {
-            System.out.println("ID: " + jogador.getId() + " - Nome: " + jogador.getNome() + " - Número: " + jogador.getNumero());
+        System.out.println("\nMain Bracket:");
+        for (int i = 0; i < torneio.getMainBracket().size(); i++) {
+            Jogador jogador = torneio.getMainBracket().get(i);
+            System.out.println((i + 1) + ". " + jogador.getNome() + " - Número: " + jogador.getNumero());
+        }
+    
+        if (torneio.getTipo().equals("DoubleKnockout")) {
+            System.out.println("\nLosers Bracket:");
+            for (int i = 0; i < torneio.getLosersBracket().size(); i++) {
+                Jogador jogador = torneio.getLosersBracket().get(i);
+                System.out.println((i + 1) + ". " + jogador.getNome() + " - Número: " + jogador.getNumero());
+            }
         }
     
         System.out.println("\nPartidas:");
@@ -362,66 +370,69 @@ import java.util.Collections;
             System.out.println("Partida " + (i + 1) + ":");
             System.out.println("Jogador 1: " + partida.getJogador1().getNome() + " - Pontuação: " + partida.getJogador1Pontuacao());
             System.out.println("Jogador 2: " + partida.getJogador2().getNome() + " - Pontuação: " + partida.getJogador2Pontuacao());
-            System.out.println(); // Adiciona uma linha em branco para separar as partidas
+            System.out.println("Árbitro: " + partida.getArbitro().getNome());
         }
     }
     
+    
+    
+    
 
     
     
     
 
-    public static void carregarTorneiosDeArquivo() {
-        String nomeArquivo = "torneios.txt"; // Nome do arquivo a ser carregado
-        try {
-            File arquivo = new File(nomeArquivo);
-            Scanner leitor = new Scanner(arquivo);
+    // public static void carregarTorneiosDeArquivo() {
+    //     String nomeArquivo = "torneios.txt"; // Nome do arquivo a ser carregado
+    //     try {
+    //         File arquivo = new File(nomeArquivo);
+    //         Scanner leitor = new Scanner(arquivo);
 
-            while (leitor.hasNextLine()) {
-                String linha = leitor.nextLine();
-                String[] partes = linha.split(" ");
+    //         while (leitor.hasNextLine()) {
+    //             String linha = leitor.nextLine();
+    //             String[] partes = linha.split(" ");
 
-                // Extrair os detalhes do torneio a partir da linha
-                String desporto = partes[0];
-                String data = partes[1];
-                String local = partes[2];
-                int numeroParticipantes = Integer.parseInt(partes[3]);
-                String tipo = partes[4]; // Knockout ou DoubleKnockout (dependendo do tipo de torneio)
-                // Aqui você pode continuar a extrair os dados conforme necessário
+    //             // Extrair os detalhes do torneio a partir da linha
+    //             String desporto = partes[0];
+    //             String data = partes[1];
+    //             String local = partes[2];
+    //             int numeroParticipantes = Integer.parseInt(partes[3]);
+    //             String tipo = partes[4]; // Knockout ou DoubleKnockout (dependendo do tipo de torneio)
+    //             // Aqui você pode continuar a extrair os dados conforme necessário
 
-                // Extrair IDs dos jogadores
-                List<Jogador> jogadores = new ArrayList<>();
-                for (int i = 5; i < 5 + numeroParticipantes; i++) {
-                    int idJogador = Integer.parseInt(partes[i]);
-                    // Aqui você deve buscar o jogador pelo ID e adicioná-lo à lista
-                    // jogadores.add(buscarJogadorPorID(idJogador));
-                }
+    //             // Extrair IDs dos jogadores
+    //             List<Jogador> jogadores = new ArrayList<>();
+    //             for (int i = 5; i < 5 + numeroParticipantes; i++) {
+    //                 int idJogador = Integer.parseInt(partes[i]);
+    //                 // Aqui você deve buscar o jogador pelo ID e adicioná-lo à lista
+    //                 // jogadores.add(buscarJogadorPorID(idJogador));
+    //             }
 
-                // Extrair IDs dos árbitros
-                List<Arbitro> arbitros = new ArrayList<>();
-                for (int i = 5 + numeroParticipantes; i < partes.length; i++) {
-                    int idArbitro = Integer.parseInt(partes[i]);
-                    // Aqui você deve buscar o árbitro pelo ID e adicioná-lo à lista
-                    // arbitros.add(buscarArbitroPorID(idArbitro));
-                }
+    //             // Extrair IDs dos árbitros
+    //             List<Arbitro> arbitros = new ArrayList<>();
+    //             for (int i = 5 + numeroParticipantes; i < partes.length; i++) {
+    //                 int idArbitro = Integer.parseInt(partes[i]);
+    //                 // Aqui você deve buscar o árbitro pelo ID e adicioná-lo à lista
+    //                 // arbitros.add(buscarArbitroPorID(idArbitro));
+    //             }
 
-                List<Jogador> losersBracket = new ArrayList<>();
+    //             List<Jogador> losersBracket = new ArrayList<>();
 
                             
-                List<Partida> partidas = new ArrayList<>();
+    //             List<Partida> partidas = new ArrayList<>();
 
-                Collections.shuffle(jogadores);
-                // Adicionar o novo torneio à lista de torneios
-                torneios.add(new Torneio(desporto, data, local, numeroParticipantes, tipo, jogadores, losersBracket, arbitros, partidas));
-            }
+    //             Collections.shuffle(jogadores);
+    //             // Adicionar o novo torneio à lista de torneios
+    //             torneios.add(new Torneio(desporto, data, local, numeroParticipantes, tipo, jogadores, losersBracket, arbitros, partidas));
+    //         }
 
-            leitor.close();
-            System.out.println("Torneios carregados com sucesso do arquivo '" + nomeArquivo + "'.");
-        } catch (FileNotFoundException e) {
-            System.out.println("O arquivo '" + nomeArquivo + "' não foi encontrado.");
-        } catch (Exception e) {
-            System.out.println("Ocorreu um erro ao carregar os torneios do arquivo '" + nomeArquivo + "'.");
-            e.printStackTrace();
-        }
-    }
+    //         leitor.close();
+    //         System.out.println("Torneios carregados com sucesso do arquivo '" + nomeArquivo + "'.");
+    //     } catch (FileNotFoundException e) {
+    //         System.out.println("O arquivo '" + nomeArquivo + "' não foi encontrado.");
+    //     } catch (Exception e) {
+    //         System.out.println("Ocorreu um erro ao carregar os torneios do arquivo '" + nomeArquivo + "'.");
+    //         e.printStackTrace();
+    //     }
+    // }
 }

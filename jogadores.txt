@@ -2,3 +2,7 @@ Marco 20 TENIS DARDOS
 Raquel 30 TENIS GOLF
 Pedro 2 TENIS
 Paulo 77 SURF TENIS
+Raul 88 TENIS
+Marila 41 TENIS
+Leandro 99 TENIS
+Champa 11 TENIS

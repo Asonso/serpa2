@@ -12,6 +12,17 @@ public class GerirArbitros {
         return arbitros;
     }
  
+    public static boolean arbitroEstaEmTorneio(Arbitro arbitro) {
+        // Verifica se o árbitro está presente no mainBracket ou no losersBracket de algum torneio
+        for (Torneio torneio : GerirTorneios.getTorneios()) {
+            if (torneio.getArbitros().contains(arbitro)) {
+                return true; // O árbitro está em algum torneio
+            }
+        }
+        return false; // O árbitro não está em nenhum torneio
+    }
+    
+    
     public static void criarArbitro() {
         Scanner scanner = new Scanner(System.in);
         System.out.println();
@@ -86,6 +97,12 @@ public class GerirArbitros {
                 for (Arbitro Arbitro : arbitros) {
                     if (Arbitro.getId() == id) {
                         arbitroEncontrado = true;
+
+                        if (arbitroEstaEmTorneio(Arbitro)) {
+                            System.out.println("Este árbitro está associado a um torneio e não pode ser modificado.");
+                            return; // Sai do método sem modificar o árbitro
+                        }
+
                         System.out.println();
                         System.out.println("Insira o novo nome do Arbitro:");
                         String nome = scanner.nextLine();
@@ -167,6 +184,12 @@ public class GerirArbitros {
                 // Verificar se o Arbitro com o ID especificado existe
                 for (int i = 0; i < arbitros.size(); i++) {
                     if (arbitros.get(i).getId() == id) {
+
+                        if (arbitroEstaEmTorneio(arbitros.get(i))) {
+                            System.out.println("Este árbitro está associado a um torneio e não pode ser apagado.");
+                            return; // Sai do método sem apagar o árbitro
+                        }
+
                         System.out.println("Tem certeza que deseja apagar o Arbitro '" + arbitros.get(i).getNome() + "'? (s/n)");
                         String confirmacao = scanner.nextLine().toLowerCase();
                         if (confirmacao.equals("s")) {
@@ -196,6 +219,7 @@ public class GerirArbitros {
             for (Arbitro arbitro : arbitros) {
                 String desportosAsString = String.join(", ", arbitro.getDesportosAsString());
                 System.out.println("(" + arbitro.getId() + ") - " + arbitro.getNome() +  ", Arbitra: " + desportosAsString);
+                System.out.println("Arbitrou " + arbitro.getJogos() + " jogos\n");
             }
         }
     }
@@ -230,6 +254,7 @@ public class GerirArbitros {
                     encontrouArbitros = true;
                     String desportosAsString = String.join(", ", Arbitro.getDesportosAsString());
                     System.out.println("(" + Arbitro.getId() + ") - " + Arbitro.getNome() + ", Arbitra: " + desportosAsString);
+                    System.out.println("Arbitrou " + Arbitro.getJogos() + " jogos\n");
                 }
             }
             if (!encontrouArbitros) {

@@ -84,4 +84,6 @@ public class Jogador {
     public void setDerrotas(int derrotas) {
         this.derrotas = derrotas;
     }
+
+    
 }

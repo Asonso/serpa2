@@ -60,6 +60,6 @@ public class Partida {
     }
 
     public void setJogador2Pontuacao(int jogador2Pontuacao){
-        this.jogador2Pontuacao = jogador1Pontuacao;
+        this.jogador2Pontuacao = jogador2Pontuacao;
     }
 }

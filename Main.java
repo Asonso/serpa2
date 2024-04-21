@@ -36,7 +36,6 @@ public class Main {
                     GerirArbitros.criarArbitrosFromFile();
                     break;
                 case 7:
-                    GerirTorneios.carregarTorneiosDeArquivo();
                     break;
                 case 8:
                     GerirPartidas.registrarPontosDaPartida(scanner);

@@ -23,7 +23,7 @@
       public static void apagarTorneios(Scanner scanner) {
 
         if (torneios.isEmpty()) {
-            System.out.println("Não existem torneios para apagar.");
+            System.out.println("Nao existem torneios para apagar.");
             return;
         }
 
@@ -37,7 +37,7 @@
             String input = scanner.nextLine();
             
             if (input.equalsIgnoreCase("voltar")) {
-                System.out.println("Operação cancelada.");
+                System.out.println("Operaçao cancelada.");
                 return; // Voltar ao menu anterior
             }
         
@@ -52,13 +52,13 @@
                             torneios.remove(i);
                             System.out.println("Torneio removido com sucesso.");
                         } else {
-                            System.out.println("Operação cancelada. O torneio não foi removido.");
+                            System.out.println("Operaçao cancelada. O torneio nao foi removido.");
                         }
-                        return; // Sai do método após apagar ou cancelar a operação
+                        return; // Sai do método após apagar ou cancelar a operaçao
                     }
                 }
-                // Se o jogador com o ID especificado não for encontrado
-                System.out.println("Torneio não encontrado.");
+                // Se o jogador com o ID especificado nao for encontrado
+                System.out.println("Torneio nao encontrado.");
             } catch (NumberFormatException e) {
                 System.out.println("Por favor, insira um ID válido ou 'voltar'.");
             }
@@ -66,7 +66,7 @@
     }
  
      /**
-      * Cria um novo torneio com base nas informações dadas pelo utilizador.
+      * Cria um novo torneio com base nas informaçaes dadas pelo utilizador.
       *
       * @param scanner    O scanner é utilizado para ler as entradas do utilizador
       */
@@ -108,7 +108,7 @@
      }
  
      /**
-      * Cria um novo torneio entre equipa com base nas informações dadas pelo utilizador.
+      * Cria um novo torneio entre equipa com base nas informaçaes dadas pelo utilizador.
       * 
       * @param scanner       O scanner é utilizado para ler as entradas do utilizador
       * @param tipoTorneio       O tipo de torneio selecionado pelo utilizador, Knockout/DoubleKnockout
@@ -167,7 +167,7 @@
      }
  
      /**
-      * Cria um novo torneio individual com base nas informações fornecidas pelo utilizador.
+      * Cria um novo torneio individual com base nas informaçaes fornecidas pelo utilizador.
       * 
       * @param scanner       O scanner é utilizado para ler as entradas do utilizador
       * @param tipoTorneio       O tipo de torneio selecionado pelo utilizador, Knockout/DOubleKnockout

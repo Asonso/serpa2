@@ -9,15 +9,14 @@ public class Arbitro {
     private int jogos;
     private static int ultimoId = 0;
 
-    public Arbitro(String nome, int numero, List<Desporto> desportos, int jogos) {
+    public Arbitro(String nome, List<Desporto> desportos, int jogos) {
         this.id = ++ultimoId;
         this.nome = nome;
-        this.numero = numero;
         this.desportos = desportos;
         this.jogos = jogos;
     }
 
-    public int getid(){
+    public int getId(){
         return id;
     }
     

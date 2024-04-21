@@ -1,10 +1,21 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 
 public class GerirJogadores {
     private static List<Jogador> jogadores = new ArrayList<>();
+    private static Map<String, List<Jogador>> jogadoresPorDesporto = new HashMap<>(); // Mapa para armazenar os jogadores por desporto
+
+    public static List<Jogador> getJogadores() {
+        return jogadores;
+    }
+
+    public static Map<String, List<Jogador>> getJogadoresPorDesporto() {
+        return jogadoresPorDesporto;
+    }
 
     public static void criarJogador() {
         Scanner scanner = new Scanner(System.in);
@@ -54,6 +65,10 @@ public class GerirJogadores {
                 for (Desporto d : Desporto.values()) {
                     if (desportoInput.equals(d.name())) {
                         desportos.add(d);
+                        // Verifica se a lista para este desporto já existe no mapa, senão cria uma nova lista
+                        jogadoresPorDesporto.putIfAbsent(d.name(), new ArrayList<>());
+                        // Adiciona o jogador à lista correspondente ao desporto no mapa
+                        jogadoresPorDesporto.get(d.name()).add(new Jogador(nome, numero, desportos, 0, 0, 0));
                         encontrado = true;
                         break;
                     }
@@ -175,7 +190,7 @@ public class GerirJogadores {
 
         if (jogadores.isEmpty()) {
             System.out.println();
-            System.out.println("Não existem jogadores para apagar.");
+            System.out.println("Nao existem jogadores para apagar.");
             return;
         }
 
@@ -208,11 +223,11 @@ public class GerirJogadores {
                         } else {
                             System.out.println("Operaçao cancelada. O jogador nao foi removido.");
                         }
-                        return; // Sai do método após apagar ou cancelar a operação
+                        return; // Sai do método após apagar ou cancelar a operaçao
                     }
                 }
-                // Se o jogador com o ID especificado não for encontrado
-                System.out.println("Jogador não encontrado.");
+                // Se o jogador com o ID especificado nao for encontrado
+                System.out.println("Jogador nao encontrado.");
             } catch (NumberFormatException e) {
                 System.out.println("Por favor, insira um ID válido ou 'voltar'.");
             }
@@ -257,7 +272,7 @@ public class GerirJogadores {
         // Se o desporto existir, mostrar jogadores que praticam esse desporto
         if (desportoDesejado != null) {
             boolean encontrouJogadores = false;
-            System.out.println();
+            System.out.println();            
             System.out.println("Jogadores que praticam " + desportoDesejado.name() + ":");
             for (Jogador jogador : jogadores) {
                 if (jogador.getDesportosAsString().contains(desportoDesejado.name())) {
@@ -273,9 +288,19 @@ public class GerirJogadores {
             System.out.println("Desporto inválido.");
         }
     }
+
+    public static void removerJogadorDesporto(Jogador jogador, DesportoEquipa desporto) {
+        String nomeDesporto = desporto.name();
+        List<Jogador> jogadoresDesporto = jogadoresPorDesporto.get(nomeDesporto);
+        if (jogadoresDesporto != null) {
+            jogadoresDesporto.remove(jogador.getNome());
+        }
+    }
     
     
     
-    
+
+
+
     
 }

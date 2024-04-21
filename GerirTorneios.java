@@ -5,12 +5,16 @@
  * 
  */
 
- import java.time.LocalDate;
- import java.time.format.DateTimeFormatter;
- import java.util.Scanner;
- import java.util.InputMismatchException;
- import java.util.ArrayList;
- import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
+import java.util.InputMismatchException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
+import java.io.File;
+import java.io.FileNotFoundException; 
+
  
  
  public class GerirTorneios {
@@ -23,12 +27,12 @@
       public static void apagarTorneios(Scanner scanner) {
 
         if (torneios.isEmpty()) {
-            System.out.println("Nao existem torneios para apagar.");
+            System.out.println("\nNao existem torneios para apagar.");
             return;
         }
 
         while (true) {
-            System.out.println("Insira o ID do torneio que deseja apagar (ou digite 'voltar' para retornar):");
+            System.out.println("\nInsira o ID do torneio que deseja apagar (ou digite 'voltar' para retornar):");
 
             for (int i = 0; i < torneios.size(); i++) {
                 System.out.println((i + 1) + ". " + torneios.get(i).getDesporto() + " - " + torneios.get(i).getData());
@@ -65,184 +69,250 @@
         }
     }
  
-     /**
-      * Cria um novo torneio com base nas informaçaes dadas pelo utilizador.
-      *
-      * @param scanner    O scanner é utilizado para ler as entradas do utilizador
-      */
-     public static void criarTorneio(Scanner scanner) {
- 
-         
-         System.out.println("Escolhe o tipo de torneio:");
-         System.out.println("1. Knockout");
-         System.out.println("2. Double Knockout");
-         System.out.print("Digita a tua escolha: ");
- 
-         int tipoTorneio = 0;
- 
-         do {
-             try {
-                 tipoTorneio = scanner.nextInt();
-                 if (tipoTorneio != 1 && tipoTorneio != 2) {
-                     System.out.println("Insira '1' ou '2'.");
-                 }
-             } catch (InputMismatchException e) {
-                 System.out.println("Insira '1' ou '2'.");
-                 scanner.nextLine(); 
-             }
-         } while (tipoTorneio !=1 && tipoTorneio !=2);
- 
-         System.out.print("O desporto é de equipa? (Digita 'sim' ou 'nao'): ");
-         String resposta;
- 
-         do {
-         resposta = scanner.next().toLowerCase();
-             if (resposta.equals("sim")) {
-                 criarTorneioEquipa(scanner, tipoTorneio);
-             } else if (resposta.equals("nao")) {
-                 criarTorneioIndividual(scanner, tipoTorneio);
-             } else {
-                 System.out.println("Insira 'sim' ou 'nao'");
-             }
-         } while (!resposta.equals("sim") && !resposta.equals("nao"));
-     }
- 
-     /**
-      * Cria um novo torneio entre equipa com base nas informaçaes dadas pelo utilizador.
-      * 
-      * @param scanner       O scanner é utilizado para ler as entradas do utilizador
-      * @param tipoTorneio       O tipo de torneio selecionado pelo utilizador, Knockout/DoubleKnockout
-      */
-     private static void criarTorneioEquipa(Scanner scanner, int tipoTorneio) {
- 
-         
-         int numeroEquipas;
- 
-         do {
-             try {
-                 System.out.print("Digite o número de equipas: ");
-                 numeroEquipas = scanner.nextInt();
-             } catch (InputMismatchException e) {
-                 System.out.println("Por favor, digite um número inteiro válido.");
-                 scanner.nextLine();
-                 numeroEquipas = -1;
-             }
-         } while (numeroEquipas <= 0);
-         
-         int elementosPorEquipa;
-         
-         do {
-             try {
-                 System.out.print("Digite o número máximo de elementos por equipe: ");
-                 elementosPorEquipa = scanner.nextInt();
-             } catch (InputMismatchException e) {
-                 System.out.println("Por favor, digite um número inteiro válido.");
-                 scanner.nextLine();
-                 elementosPorEquipa = -1;
-             }
-         } while (elementosPorEquipa <= 0);
- 
-         String data;
-         do {
-             System.out.print("Digita a data (formato dd-MM-aaaa): ");
-             data = scanner.next();
-         } while (!Validacoes.dataValida(data));
- 
-         Desporto desporto = Validacoes.validarDesporto(scanner);
- 
-         System.out.print("Digita o local: ");
-         String local = scanner.next();
- 
-         if (tipoTorneio == 1) {
-             Torneio novoTorneio = new Torneio(desporto.toString(), data, local, numeroEquipas, 0, "Knockout");
-             torneios.add(novoTorneio);
-             contadorTorneios++;
-         } else if (tipoTorneio == 2) {
-             Torneio novoTorneio = new Torneio(desporto.toString(), data, local, numeroEquipas, 0, "DoubleKnockout");
-             torneios.add(novoTorneio);
-             contadorTorneios++;
-         } else {
-             System.out.println("Tipo de torneio inválido. Torneio nao criado.");
-         }
-     }
- 
-     /**
-      * Cria um novo torneio individual com base nas informaçaes fornecidas pelo utilizador.
-      * 
-      * @param scanner       O scanner é utilizado para ler as entradas do utilizador
-      * @param tipoTorneio       O tipo de torneio selecionado pelo utilizador, Knockout/DOubleKnockout
-      */
-     private static void criarTorneioIndividual(Scanner scanner, int tipoTorneio) {
-         
-         int numeroParticipantes;
- 
-         do {
-             try {
-                 System.out.print("Digita o número de participantes: ");
-                 numeroParticipantes = scanner.nextInt();
-             } catch (InputMismatchException e) {
-                 System.out.println("Insira um número válido para o número de participantes.");
-                 scanner.nextLine();
-                 numeroParticipantes = -1;
-             }
-         } while (numeroParticipantes <= 0);
- 
-         String data;
-         do {
-             System.out.print("Digita a data (formato dd-MM-aaaa): ");
-             data = scanner.next();
-         } while (!Validacoes.dataValida(data));
- 
-         Desporto desporto = Validacoes.validarDesporto(scanner);
- 
-         System.out.print("Digita o local: ");
-         String local = scanner.next();
- 
-         if (tipoTorneio == 1) {
-             Torneio novoTorneio = new Torneio(desporto.toString(), data, local, 0, numeroParticipantes, "Knockout");
-             torneios.add(novoTorneio);
-             contadorTorneios++;
-         } else if (tipoTorneio == 2) {
-             Torneio novoTorneio = new Torneio(desporto.toString(), data, local, 0, numeroParticipantes, "DoubleKnockout");
-             torneios.add(novoTorneio);
-             contadorTorneios++;
-         }
-     }
+    /**
+    * Cria um novo torneio com base nas informaçoes dadas pelo utilizador.
+    *
+    * @param scanner O scanner é utilizado para ler as entradas do utilizador
+    */
+    public static void criarTorneio(Scanner scanner) {
+        System.out.println("\nEscolha o tipo de torneio:");
+        System.out.println("1. Knockout");
+        System.out.println("2. Double Knockout");
+        System.out.print("Insira a tua escolha: ");
+
+        int tipoTorneio = 0;
+
+        do {
+            try {
+                tipoTorneio = scanner.nextInt();
+                if (tipoTorneio != 1 && tipoTorneio != 2) {
+                    System.out.println("Insira '1' ou '2'.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Insira '1' ou '2'.");
+                scanner.nextLine();
+            }
+        } while (tipoTorneio != 1 && tipoTorneio != 2);
+
+        int numeroParticipantes;
+
+        do {
+            try {
+                System.out.print("\nInsira o número de participantes (4, 8, 16 ou 32): ");
+                numeroParticipantes = scanner.nextInt();
+
+                if (numeroParticipantes != 4 && numeroParticipantes != 8 && numeroParticipantes != 16 && numeroParticipantes != 32) {
+                    System.out.println("Insira um número válido de participantes (4, 8, 16 ou 32).");
+                    numeroParticipantes = -1;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Insira um número válido de participantes (4, 8, 16 ou 32).");
+                scanner.nextLine();
+                numeroParticipantes = -1;
+            }
+        } while (numeroParticipantes != 4 && numeroParticipantes != 8 && numeroParticipantes != 16 && numeroParticipantes != 32);
+
+        
+        String data;
+        do {
+            System.out.print("\nInsira a data (formato dd-MM-aaaa): ");
+            data = scanner.next();
+        } while (!Validacoes.dataValida(data));
+
+        Desporto desporto = Validacoes.validarDesporto(scanner);
+
+        int jogadoresDisponiveis = 0;
+        for (Jogador jogador : GerirJogadores.getJogadores()) {
+            if (jogador.getDesportos().contains(desporto)) {
+                jogadoresDisponiveis++;
+            }
+        }
+
+        
+        // Verificar se o número de jogadores disponíveis é menor ou igual ao número de participantes do torneio
+        if (jogadoresDisponiveis < numeroParticipantes) {
+            System.out.println("Nao há jogadores suficientes com o desporto selecionado para o número de participantes especificado. A operaçao foi cancelada.");
+            return;
+        }
+
+        int arbitrosDisponiveis = 0;
+        for (Arbitro arbitro : GerirArbitros.getArbitros()) {
+            if (arbitro.getDesportos().contains(desporto)) {
+                arbitrosDisponiveis++;
+            }
+        }
+
+        // Verificar se o número de árbitros disponíveis é menor ou igual ao número de árbitros necessários para o torneio
+        if (arbitrosDisponiveis < 2) {
+            System.out.println("Não há árbitros suficientes com o desporto selecionado para o torneio. A operação foi cancelada.");
+            return;
+        }
+        
+        System.out.print("\nInsira o local: ");
+        String local = scanner.next();
+        
+        List<Jogador> losersBracket = new ArrayList<>();
+        List<Jogador> mainBracket = new ArrayList<>();
+        scanner.nextLine(); // Limpar o buffer do scanner
+
+        // Selecionar jogadores da lista existente
+        if (!GerirJogadores.getJogadores().isEmpty()) {
+            System.out.println("\nLista de jogadores disponíveis para o desporto " + desporto + ":");
+            for (Jogador jogador : GerirJogadores.getJogadores()) {
+                if (jogador.getDesportos().contains(desporto)) {
+                    System.out.println("(" + jogador.getId() + "). " + jogador.getNome() + " - Número: " + jogador.getNumero());
+                }
+            }
+        
+            for (int i = 0; i < numeroParticipantes; i++) {
+                int id = 0;
+                boolean idValido = false;
+        
+                while (!idValido) {
+                    try {
+                        System.out.print("\nInsira o ID do jogador " + (i + 1) + ": ");
+                        id = scanner.nextInt();
+        
+                        final int finalId = id; // Variável final para usar na expressao lambda
+        
+                        // Verifica se o jogador já foi selecionado anteriormente
+                        boolean idRepetido = mainBracket.stream().anyMatch(jogador -> jogador.getId() == finalId);
+                        if (idRepetido) {
+                            System.out.println("Este jogador já foi selecionado para uma posiçao anterior. Por favor, insira um ID válido.");
+                            continue; // Pula para a próxima iteraçao do loop while
+                        }
+        
+                        // Verifica se o ID está na lista de jogadores e se o desporto do jogador corresponde ao desporto do torneio
+                        idValido = GerirJogadores.getJogadores().stream().anyMatch(jogador -> jogador.getId() == finalId && jogador.getDesportos().contains(desporto));
+        
+                        if (!idValido) {
+                            System.out.println("ID inválido ou jogador nao corresponde ao desporto do torneio. Por favor, insira um ID válido.");
+                        }
+                    } catch (InputMismatchException e) {
+                        System.out.println("Entrada inválida. Por favor, insira um número.");
+                        scanner.nextLine(); // Limpar o buffer do scanner
+                    }
+                }
+        
+                // Adiciona o jogador correspondente ao ID à lista de jogadores do torneio
+                for (Jogador jogador : GerirJogadores.getJogadores()) {
+                    if (jogador.getId() == id) {
+                        mainBracket.add(jogador);
+                        break;
+                    }
+                }
+            }
+        
+
+        } else {
+            System.out.println("Nao existem jogadores registrados. O torneio será criado sem jogadores.");
+        }
+
+        
+        List<Arbitro> arbitros = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            int id = 0;
+            boolean idValido = false;
+
+            System.out.println("\nLista de arbitros disponíveis para o desporto " + desporto + ":");
+            for (Arbitro arbitro : GerirArbitros.getArbitros()) {
+                if (arbitro.getDesportos().contains(desporto)) {
+                    System.out.println("(" + arbitro.getId() + "). " + arbitro.getNome());
+                }
+            }
+
+            while (!idValido) {
+                try {
+                    System.out.print("\nInsira o ID do árbitro " + (i + 1) + ": ");
+                    id = scanner.nextInt();
+
+                    final int finalId = id; // Variável final para usar na expressão lambda
+
+                    // Verifica se o árbitro já foi selecionado anteriormente
+                    boolean idRepetido = arbitros.stream().anyMatch(arbitro -> arbitro.getId() == finalId);
+                    if (idRepetido) {
+                        System.out.println("Este árbitro já foi selecionado para uma posição anterior. Por favor, insira um ID válido.");
+                        continue; // Pula para a próxima iteração do loop while
+                    }
+
+                    // Verifica se o ID está na lista de árbitros e se o desporto do árbitro corresponde ao desporto do torneio
+                    idValido = GerirArbitros.getArbitros().stream().anyMatch(arbitro -> arbitro.getId() == finalId && arbitro.getDesportos().contains(desporto));
+
+                    if (!idValido) {
+                        System.out.println("ID inválido ou árbitro não corresponde ao desporto do torneio. Por favor, insira um ID válido.");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrada inválida. Por favor, insira um número.");
+                    scanner.nextLine(); // Limpar o buffer do scanner
+                }
+            }
+
+            // Adiciona o árbitro correspondente ao ID à lista de árbitros do torneio
+            for (Arbitro arbitro : GerirArbitros.getArbitros()) {
+                if (arbitro.getId() == id) {
+                    arbitros.add(arbitro);
+                    break;
+                }
+            }
+        }
+
+        if (tipoTorneio == 1) {
+            Torneio novoTorneio = new Torneio(desporto.toString(), data, local, numeroParticipantes, "Knockout", mainBracket, losersBracket, arbitros);
+            torneios.add(novoTorneio);
+        } else if (tipoTorneio == 2) {
+            Torneio novoTorneio = new Torneio(desporto.toString(), data, local, numeroParticipantes, "DoubleKnockout", mainBracket, losersBracket, arbitros);
+            torneios.add(novoTorneio);
+        }
+    }
      /**
       * Mostra os detalhes dos torneios armazenados no sistema, permitindo ao utilizador escolher se deseja mostrar todos os torneios ou apenas um específico.
       * 
       */
      
-     public static void mostrarTorneios() {
-         Scanner scanner = new Scanner(System.in);
-     
-         if (contadorTorneios == 0) {
-             System.out.println("Nao existem torneios para mostrar.");
-             return;
-         }
-     
-         System.out.println("Prefere mostrar todos os torneios ou apenas um específico?");
-         System.out.println("1. Todos os torneios");
-         System.out.println("2. Mostrar torneio específico");
-         System.out.print("Digita sua escolha: ");
-     
-         int escolha = scanner.nextInt();
-     
-         if (escolha == 1) {
-             for (int i = 0; i < contadorTorneios; i++) {
-                 dadosTorneio(i);
-             }
-         } else if (escolha == 2) {
-             System.out.println("Digita o número do torneio que deseja mostrar: ");
-             for (int i = 0; i < contadorTorneios; i++) {
-                 System.out.println((i + 1) + ". " + torneios.get(i).getDesporto() + " - " + torneios.get(i).getData());
-             }
-             int numeroTorneio = scanner.nextInt();
-             dadosTorneio(numeroTorneio - 1);
-         } else {
-             System.out.println("Opçao inválida.");
-         }
-     }
+      public static void mostrarTorneios() {
+        Scanner scanner = new Scanner(System.in);
+    
+        if (torneios.isEmpty()) {
+            System.out.println("\nNao existem torneios para mostrar.");
+            return;
+        }
+    
+        System.out.println("\nPrefere mostrar todos os torneios ou apenas um específico?");
+        System.out.println("1. Todos os torneios");
+        System.out.println("2. Mostrar torneio específico");
+        System.out.print("Insira sua escolha: ");
+    
+        int escolha = scanner.nextInt();
+    
+        if (escolha == 1) {
+            for (int i = 0; i < torneios.size(); i++) {
+                dadosTorneio(i);
+            }
+        } else if (escolha == 2) {
+            System.out.println("\nInsira o ID do torneio que deseja mostrar: ");
+            for (int i = 0; i < torneios.size(); i++) {
+                System.out.println((i + 1) + ". " + torneios.get(i).getDesporto() + " - " + torneios.get(i).getData());
+            }
+            int numeroTorneio;
+    
+            do {
+                try {
+                    numeroTorneio = scanner.nextInt();
+                    if (numeroTorneio < 1 || numeroTorneio > torneios.size()) {
+                        System.out.println("Insira um ID válido de torneio.");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Insira um ID válido de torneio.");
+                    scanner.nextLine(); // Limpa o buffer do scanner
+                    numeroTorneio = -1; // Força o loop a continuar pedindo uma entrada válida
+                }
+            } while (numeroTorneio < 1 || numeroTorneio > torneios.size());
+    
+            dadosTorneio(numeroTorneio - 1);
+        } else {
+            System.out.println("Opçao inválida.");
+        }
+    }
      
      /**
       * Mostra os detalhes de um torneio específico com base no índice fornecido.
@@ -250,7 +320,7 @@
       * @param indice O índice do torneio a ser mostrado
       */
      private static void dadosTorneio(int indice) {
-         System.out.println("Torneio " + (indice + 1) + ":");
+         System.out.println("\nTorneio " + (indice + 1) + ":");
          System.out.println("Desporto: " + torneios.get(indice).getDesporto());
          System.out.println("Data: " + torneios.get(indice).getData());
          System.out.println("Local: " + torneios.get(indice).getLocal());
@@ -261,12 +331,122 @@
              System.out.println("Tipo: Double Knockout");
          }
          
-         if (torneios.get(indice).getNumeroEquipas() > 0) {
-             System.out.println("Número de Equipas: " + torneios.get(indice).getNumeroEquipas());
-         } else {
-             System.out.println("Número de Participantes: " + torneios.get(indice).getNumeroParticipantes());
-         }
-         
-         System.out.println();
+        System.out.println("Número de Participantes: " + torneios.get(indice).getNumeroParticipantes());
      }
- }
+
+     public static void registrarPartidas(Scanner scanner) {
+        if (torneios.isEmpty()) {
+            System.out.println("\nNão existem torneios para registrar partidas.");
+            return;
+        }
+    
+        // Mostra a lista de torneios disponíveis
+        System.out.println("\nLista de Torneios Disponíveis:");
+        for (int i = 0; i < torneios.size(); i++) {
+            System.out.println((i + 1) + ". " + torneios.get(i).getDesporto() + " - " + torneios.get(i).getData());
+        }
+    
+        int indiceTorneio;
+        do {
+            try {
+                System.out.print("\nInsira o ID do torneio para o qual deseja registrar partidas (ou digite 'voltar' para retornar): ");
+                String input = scanner.nextLine();
+                if (input.equalsIgnoreCase("voltar")) {
+                    System.out.println("Operação cancelada.");
+                    return; // Retorna ao menu anterior
+                }
+                indiceTorneio = Integer.parseInt(input) - 1; // Ajusta para o índice do ArrayList
+                if (indiceTorneio < 0 || indiceTorneio >= torneios.size()) {
+                    System.out.println("ID de torneio inválido. Por favor, insira um ID válido.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Por favor, insira um número válido ou 'voltar'.");
+                indiceTorneio = -1;
+            }
+        } while (indiceTorneio < 0 || indiceTorneio >= torneios.size());
+    
+        Torneio torneio = torneios.get(indiceTorneio);
+    
+        if (torneio.getTipo().equals("Knockout")) {
+            // Em um torneio Knockout, os jogadores são colocados no mainBracket e a ordem é aleatória
+            Collections.shuffle(torneio.getMainBracket());
+        }
+    
+        List<Jogador> mainBracket = torneio.getMainBracket();
+        List<Arbitro> arbitros = torneio.getArbitros();
+        String desporto = torneio.getDesporto();
+    
+        int numeroPartidas = mainBracket.size() / 2;
+    
+        System.out.println("\nRegistrando partidas para o torneio de " + desporto + ":");
+    
+        for (int i = 0; i < numeroPartidas; i++) {
+            Jogador jogador1 = mainBracket.get(i * 2);
+            Jogador jogador2 = mainBracket.get(i * 2 + 1);
+            Arbitro arbitro = arbitros.get(i % arbitros.size()); // Alternar entre os árbitros
+    
+            System.out.println("Torneio " + desporto + " - Partida " + (i + 1) + ": " + jogador1.getNome() + " vs " + jogador2.getNome() + ", arbitrado por " + arbitro.getNome());
+    
+            // Solicita o resultado para o primeiro jogador
+            System.out.print("Resultado para " + jogador1.getNome() + ": ");
+            int resultadoJogador1 = Integer.parseInt(scanner.nextLine());
+    
+            // Solicita o resultado para o segundo jogador
+            System.out.print("Resultado para " + jogador2.getNome() + ": ");
+            int resultadoJogador2 = Integer.parseInt(scanner.nextLine());
+    
+            // Aqui você pode fazer o que quiser com os resultados, como armazená-los em algum lugar, processá-los, etc.
+        }
+    }
+    
+
+    public static void carregarTorneiosDeArquivo() {
+        String nomeArquivo = "torneios.txt"; // Nome do arquivo a ser carregado
+        try {
+            File arquivo = new File(nomeArquivo);
+            Scanner leitor = new Scanner(arquivo);
+
+            while (leitor.hasNextLine()) {
+                String linha = leitor.nextLine();
+                String[] partes = linha.split(" ");
+
+                // Extrair os detalhes do torneio a partir da linha
+                String desporto = partes[0];
+                String data = partes[1];
+                String local = partes[2];
+                int numeroParticipantes = Integer.parseInt(partes[3]);
+                String tipo = partes[4]; // Knockout ou DoubleKnockout (dependendo do tipo de torneio)
+                // Aqui você pode continuar a extrair os dados conforme necessário
+
+                // Extrair IDs dos jogadores
+                List<Jogador> jogadores = new ArrayList<>();
+                for (int i = 5; i < 5 + numeroParticipantes; i++) {
+                    int idJogador = Integer.parseInt(partes[i]);
+                    // Aqui você deve buscar o jogador pelo ID e adicioná-lo à lista
+                    // jogadores.add(buscarJogadorPorID(idJogador));
+                }
+
+                // Extrair IDs dos árbitros
+                List<Arbitro> arbitros = new ArrayList<>();
+                for (int i = 5 + numeroParticipantes; i < partes.length; i++) {
+                    int idArbitro = Integer.parseInt(partes[i]);
+                    // Aqui você deve buscar o árbitro pelo ID e adicioná-lo à lista
+                    // arbitros.add(buscarArbitroPorID(idArbitro));
+                }
+
+                List<Jogador> losersBracket = new ArrayList<>();
+
+                // Adicionar o novo torneio à lista de torneios
+                torneios.add(new Torneio(desporto, data, local, numeroParticipantes, tipo, jogadores, losersBracket, arbitros));
+            }
+
+            leitor.close();
+            System.out.println("Torneios carregados com sucesso do arquivo '" + nomeArquivo + "'.");
+        } catch (FileNotFoundException e) {
+            System.out.println("O arquivo '" + nomeArquivo + "' não foi encontrado.");
+        } catch (Exception e) {
+            System.out.println("Ocorreu um erro ao carregar os torneios do arquivo '" + nomeArquivo + "'.");
+            e.printStackTrace();
+        }
+    }
+}

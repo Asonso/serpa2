@@ -4,17 +4,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.InputMismatchException;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class GerirJogadores {
     private static List<Jogador> jogadores = new ArrayList<>();
-    private static Map<String, List<Jogador>> jogadoresPorDesporto = new HashMap<>(); // Mapa para armazenar os jogadores por desporto
 
     public static List<Jogador> getJogadores() {
         return jogadores;
-    }
-
-    public static Map<String, List<Jogador>> getJogadoresPorDesporto() {
-        return jogadoresPorDesporto;
     }
 
     public static void criarJogador() {
@@ -65,10 +62,6 @@ public class GerirJogadores {
                 for (Desporto d : Desporto.values()) {
                     if (desportoInput.equals(d.name())) {
                         desportos.add(d);
-                        // Verifica se a lista para este desporto já existe no mapa, senão cria uma nova lista
-                        jogadoresPorDesporto.putIfAbsent(d.name(), new ArrayList<>());
-                        // Adiciona o jogador à lista correspondente ao desporto no mapa
-                        jogadoresPorDesporto.get(d.name()).add(new Jogador(nome, numero, desportos, 0, 0, 0));
                         encontrado = true;
                         break;
                     }
@@ -289,15 +282,44 @@ public class GerirJogadores {
         }
     }
 
-    public static void removerJogadorDesporto(Jogador jogador, DesportoEquipa desporto) {
-        String nomeDesporto = desporto.name();
-        List<Jogador> jogadoresDesporto = jogadoresPorDesporto.get(nomeDesporto);
-        if (jogadoresDesporto != null) {
-            jogadoresDesporto.remove(jogador.getNome());
+    public static void criarJogadoresFromFile() {
+        String fileName = "jogadores.txt"; // Nome do arquivo a ser usado
+    
+        try {
+            File file = new File(fileName);
+            Scanner scanner = new Scanner(file);
+    
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] tokens = line.split(" ");
+
+                // Primeiro token é o nome do jogador
+                String nome = tokens[0];
+
+                // Segundo token é o número do jogador
+                int numero = Integer.parseInt(tokens[1]);
+
+                // Restante dos tokens são os desportos do jogador
+                List<Desporto> desportos = new ArrayList<>();
+                for (int i = 2; i < tokens.length; i++) {
+                    Desporto desporto = Desporto.valueOf(tokens[i].toUpperCase());
+                    desportos.add(desporto);
+                }
+
+                // Cria o jogador com as informações lidas e adiciona à lista de jogadores
+                Jogador jogador = new Jogador(nome, numero, desportos, 0, 0, 0);
+                jogadores.add(jogador);
+            }
+
+            System.out.println("Jogadores criados a partir do arquivo com sucesso.");
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo não encontrado: " + fileName);
+        } catch (NumberFormatException e) {
+            System.out.println("Erro ao ler o número do jogador.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Desporto inválido encontrado no arquivo.");
         }
-    }
-    
-    
+    }    
     
 
 

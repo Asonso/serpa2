@@ -30,7 +30,16 @@ public class Main {
                     System.out.println("Adeus! (>‿o)");
                     System.exit(0);
                 case 5:
-                    GerirEquipas.criarEquipa();
+                    GerirJogadores.criarJogadoresFromFile();
+                    break;
+                case 6:
+                    GerirArbitros.criarArbitrosFromFile();
+                    break;
+                case 7:
+                    GerirTorneios.carregarTorneiosDeArquivo();
+                    break;
+                case 8:
+                    GerirTorneios.registrarPartidas(scanner);
                     break;
                 default:
                     System.out.println("Escolha inválida. Insira uma das opções.");

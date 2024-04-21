@@ -40,23 +40,27 @@
       * @param scanner       O scanner utilizado para ler a entrada do utilizador
       * @return O desporto validado
       */
-     public static Desporto validarDesporto(Scanner scanner) {
-         Desporto desporto = null;
-         boolean desportoValido = false;
- 
-         do {
-             System.out.print("Digite o desporto: ");
-             String desportoStr = scanner.next().toUpperCase();
- 
-             try {
-                 desporto = Desporto.valueOf(desportoStr);
-                 desportoValido = true;
-             } catch (IllegalArgumentException e) {
-                 System.out.println("Desporto não válido.");
-             }
-         } while (!desportoValido);
- 
-         return desporto;
-     }
+    public static Desporto validarDesporto(Scanner scanner) {
+        Desporto desportoEscolhido = null;
+        boolean desportoValido = false;
+
+        while (!desportoValido) {
+            System.out.println("\nDesportos disponíveis:");
+            for (Desporto d : Desporto.values()) {
+                System.out.println("- " + d.name());
+            }
+            System.out.print("Escolha o desporto: ");
+            String inputDesporto = scanner.next();
+
+            try {
+                desportoEscolhido = Desporto.valueOf(inputDesporto.toUpperCase());
+                desportoValido = true;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Desporto inválido. Por favor, escolha um desporto da lista.");
+            }
+        }
+
+        return desportoEscolhido;
+    }
  }
  

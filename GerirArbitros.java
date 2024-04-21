@@ -2,9 +2,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.InputMismatchException;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class GerirArbitros {
     private static List<Arbitro> arbitros = new ArrayList<>();
+
+    public static List<Arbitro> getArbitros() {
+        return arbitros;
+    }
  
     public static void criarArbitro() {
         Scanner scanner = new Scanner(System.in);
@@ -233,4 +239,39 @@ public class GerirArbitros {
             System.out.println("Desporto inválido.");
         }
     }
+
+    public static void criarArbitrosFromFile() {
+        String fileName = "arbitros.txt"; // Nome do arquivo dos árbitros
+
+        try {
+            File file = new File(fileName);
+            Scanner scanner = new Scanner(file);
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] tokens = line.split(" ");
+
+                // Primeiro token é o nome do árbitro
+                String nome = tokens[0];
+
+                // Restante dos tokens são os desportos do árbitro
+                List<Desporto> desportos = new ArrayList<>();
+                for (int i = 1; i < tokens.length; i++) {
+                    Desporto desporto = Desporto.valueOf(tokens[i].toUpperCase());
+                    desportos.add(desporto);
+                }
+
+                // Cria o árbitro com as informações lidas e adiciona à lista de árbitros
+                Arbitro arbitro = new Arbitro(nome, desportos, 0);
+                arbitros.add(arbitro);
+            }
+
+            System.out.println("Árbitros criados a partir do arquivo com sucesso.");
+        } catch (FileNotFoundException e) {
+            System.out.println("Arquivo não encontrado: " + fileName);
+        } catch (IllegalArgumentException e) {
+            System.out.println("Desporto inválido encontrado no arquivo.");
+        }
+    }
+
 }

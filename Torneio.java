@@ -16,6 +16,7 @@ import java.util.List;
     private List<Jogador> mainBracket;
     private List<Jogador> losersBracket;
     private List<Arbitro> arbitros;
+    private List<Partida> partidas;
     private static int ultimoId = 0;
     
     /**
@@ -27,7 +28,7 @@ import java.util.List;
      * @param numeroParticipantes       Número de participantes no torneio    
      * @param tipo      Tipo do torneio     
      */
-    public Torneio(String desporto, String data, String local, int numeroParticipantes, String tipo, List<Jogador> mainBracket, List<Jogador> losersBracket, List<Arbitro> arbitros) {
+    public Torneio(String desporto, String data, String local, int numeroParticipantes, String tipo, List<Jogador> mainBracket, List<Jogador> losersBracket, List<Arbitro> arbitros, List<Partida> partidas) {
         this.id = ++ultimoId;
         this.desporto = desporto;
         this.data = data;
@@ -37,6 +38,8 @@ import java.util.List;
         this.mainBracket = mainBracket;
         this.losersBracket = losersBracket;
         this.arbitros = arbitros;
+        this.partidas = partidas;
+
         
     }
 
@@ -125,4 +128,17 @@ import java.util.List;
     public void removerArbitro(Arbitro arbitro) {
         arbitros.remove(arbitro);
     }
+
+    public List<Partida> getPartidas() {
+        return this.partidas;
+    }
+
+    public void adicionarPartida(Partida partida) {
+        this.partidas.add(partida);
+    }
+
+    public void removerPartida(Partida partida){
+        this.partidas.remove(partida);
+    }
+    
 }

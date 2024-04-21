@@ -4,7 +4,6 @@ import java.util.List;
 public class Arbitro {
     private int id;
     private String nome;
-    private int numero;
     private List<Desporto> desportos;
     private int jogos;
     private static int ultimoId = 0;
@@ -26,14 +25,6 @@ public class Arbitro {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public int getNumero(){
-        return numero;
-    }
-
-    public void setNumero(int numero) {
-        this.numero = numero;
     }
 
     public List<Desporto> getDesportos() {

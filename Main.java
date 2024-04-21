@@ -39,7 +39,7 @@ public class Main {
                     GerirTorneios.carregarTorneiosDeArquivo();
                     break;
                 case 8:
-                    GerirTorneios.registrarPartidas(scanner);
+                    GerirPartidas.registrarPontosDaPartida(scanner);
                     break;
                 default:
                     System.out.println("Escolha inválida. Insira uma das opções.");

@@ -1,11 +1,17 @@
 import java.util.Scanner;
- 
+
+/**
+ * @author 84152 Francisco Picoito
+ * @author 55301 Diogo Marques
+ * @author 79256 Afonso Santos
+ */
 public class Main {
- 
+
     /**
      * Método principal que inicia o programa de gerenciamento de torneios.
+     * Permite ao usuário selecionar várias opções, como gerenciar torneios, jogadores, árbitros ou sair do programa.
      *
-     * @param args Argumentos de linha de comando
+     * @param args Argumentos da linha de comando (não utilizados neste programa)
      */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -14,7 +20,7 @@ public class Main {
             exibirMenuPrincipal();
    
             int escolhaPrincipal = scanner.nextInt();
-            scanner.nextLine(); // Limpar o buffer
+            scanner.nextLine();
    
             switch (escolhaPrincipal) {
                 case 1:
@@ -29,23 +35,15 @@ public class Main {
                 case 4:
                     System.out.println("Adeus! (>‿o)");
                     System.exit(0);
-                case 5:
-                    GerirJogadores.criarJogadoresFromFile();
-                    break;
-                case 6:
-                    GerirArbitros.criarArbitrosFromFile();
-                    break;
-                case 7:
-                    break;
-                case 8:
-                    GerirPartidas.registrarPontosDaPartida(scanner);
-                    break;
                 default:
                     System.out.println("Escolha inválida. Insira uma das opções.");
             }
         }
     }
    
+    /**
+     * Exibe o menu principal do programa.
+     */
     private static void exibirMenuPrincipal() {
         System.out.println("\nMenu Principal:");
         System.out.println("1. Gerir Torneios");
@@ -55,12 +53,17 @@ public class Main {
         System.out.print("Digite sua escolha: ");
     }    
    
+    /**
+     * Exibe o menu de gerenciamento de torneios e permite ao usuário selecionar várias opções relacionadas aos torneios.
+     *
+     * @param scanner O scanner utilizado para ler as entradas do usuário
+     */
     private static void menuGerirTorneios(Scanner scanner) {
         while (true) {
             exibirMenuGerirTorneios();
    
             int escolhaTorneios = scanner.nextInt();
-            scanner.nextLine(); // Limpar o buffer
+            scanner.nextLine(); 
    
             switch (escolhaTorneios) {
                 case 1:
@@ -73,28 +76,40 @@ public class Main {
                     GerirTorneios.mostrarTorneios();
                     break;
                 case 4:
-                    return; // Voltar ao menu principal
+                    GerirPartidas.registrarPontosDaPartida(scanner);
+                    break;
+                case 5:
+                    return; 
                 default:
                     System.out.println("Escolha inválida. Insira uma das opções.");
             }
         }
     }
    
+    /**
+     * Exibe o menu de gerenciamento de torneios.
+     */
     private static void exibirMenuGerirTorneios() {
         System.out.println("\nMenu Gerir Torneios:");
         System.out.println("1. Criar Torneio");
         System.out.println("2. Apagar Torneios");
         System.out.println("3. Mostrar Torneios");
-        System.out.println("4. Voltar ao Menu Principal");
+        System.out.println("4. Pontuar Partidas");
+        System.out.println("5. Voltar ao Menu Principal");
         System.out.print("Digite sua escolha: ");
     }
    
+    /**
+     * Exibe o menu de gerenciamento de jogadores e permite ao usuário selecionar várias opções relacionadas aos jogadores.
+     *
+     * @param scanner O scanner utilizado para ler as entradas do usuário
+     */
     private static void menuGerirJogadores(Scanner scanner) {
         while (true) {
             exibirMenuGerirJogadores();
    
             int escolhaJogadores = scanner.nextInt();
-            scanner.nextLine(); // Limpar o buffer
+            scanner.nextLine(); 
    
             switch (escolhaJogadores) {
                 case 1:
@@ -107,33 +122,45 @@ public class Main {
                     GerirJogadores.apagarJogador(scanner);
                     break;
                 case 4:
-                    menuMostrarJogadores(scanner); // Mostrar opções de mostrar jogadores
+                    menuMostrarJogadores(scanner); 
                     break;
                 case 5:
-                    return; // Voltar ao menu principal
+                    GerirJogadores.criarJogadoresFromFile();
+                    break;
+                case 6:
+                    return; 
                 default:
                     System.out.println("Escolha inválida. Insira uma das opções.");
             }
         }
     }
  
+    /**
+     * Exibe o menu de gerenciamento de Jogadores.
+     */
     private static void exibirMenuGerirJogadores() {
         System.out.println("\nMenu Gerir Jogadores:");
         System.out.println("1. Criar Jogador");
         System.out.println("2. Modificar Jogador");
         System.out.println("3. Apagar Jogador");
         System.out.println("4. Mostrar Jogadores");
-        System.out.println("5. Voltar ao Menu Principal");
+        System.out.println("5. Criar jogadores por ficheiro");
+        System.out.println("6. Voltar ao Menu Principal");
         System.out.print("Digite sua escolha: ");
     }
    
    
+    /**
+     * Exibe o menu que permite escolher entre dois métodos de diferentes para mostrar os jogadores
+     *
+     * @param scanner O scanner utilizado para ler as entradas do usuário
+     */
     private static void menuMostrarJogadores(Scanner scanner) {
         while (true) {
             exibirMenuMostrarJogadores();
    
             int escolhaMostrarJogadores = scanner.nextInt();
-            scanner.nextLine(); // Limpar o buffer
+            scanner.nextLine(); 
    
             switch (escolhaMostrarJogadores) {
                 case 1:
@@ -143,13 +170,16 @@ public class Main {
                     GerirJogadores.mostrarJogadoresPorDesporto(scanner);
                     break;
                 case 3:
-                    return; // Voltar ao menu de jogadores
+                    return; 
                 default:
                     System.out.println("Escolha inválida. Insira uma das opções.");
             }
         }
     }
    
+    /**
+     * Exibe o menu de gerenciamento de torneios.
+     */
     private static void exibirMenuMostrarJogadores() {
         System.out.println("\nMenu Mostrar Jogadores:");
         System.out.println("1. Mostrar todos os jogadores");
@@ -158,13 +188,17 @@ public class Main {
         System.out.print("Digite sua escolha: ");
     }
    
- 
+    /**
+     * Exibe o menu de gerenciamento de árbitros e permite ao usuário selecionar várias opções relacionadas aos árbitros.
+     *
+     * @param scanner O scanner utilizado para ler as entradas do usuário
+     */
     private static void menuGerirArbitros(Scanner scanner) {
         while (true) {
             exibirMenuGerirArbitros();
  
             int escolhaArbitros = scanner.nextInt();
-            scanner.nextLine(); // Limpar o buffer
+            scanner.nextLine(); 
  
             switch (escolhaArbitros) {
                 case 1:
@@ -180,6 +214,9 @@ public class Main {
                     menuMostrarArbitros(scanner);
                     break;
                 case 5:
+                    GerirArbitros.criarArbitrosFromFile();
+                    break;
+                case 6:
                     return;
                 default:
                     System.out.println("Escolha inválida. Insira uma das opções.");
@@ -193,7 +230,8 @@ public class Main {
         System.out.println("2. Modificar Arbitro");
         System.out.println("3. Apagar Arbitro");
         System.out.println("4. Mostrar Arbitros");
-        System.out.println("5. Voltar ao Menu Principal");
+        System.out.println("5. Criar arbitros por ficheiro");
+        System.out.println("6. Voltar ao Menu Principal");
         System.out.print("Digite sua escolha: ");
     }
 
@@ -202,7 +240,7 @@ public class Main {
             exibirMenuMostrarArbitros();
    
             int escolhaMostrarArbitros = scanner.nextInt();
-            scanner.nextLine(); // Limpar o buffer
+            scanner.nextLine(); 
    
             switch (escolhaMostrarArbitros) {
                 case 1:
@@ -212,7 +250,7 @@ public class Main {
                     GerirArbitros.mostrarArbitrosPorDesporto(scanner);
                     break;
                 case 3:
-                    return; // Voltar ao menu de jogadores
+                    return; 
                 default:
                     System.out.println("Escolha inválida. Insira uma das opções.");
             }

@@ -5,30 +5,46 @@ import java.util.InputMismatchException;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+/**
+ * @author 84152 Francisco Picoito
+ * @author 55301 Diogo Marques
+ * @author 79256 Afonso Santos
+ */
 public class GerirArbitros {
     private static List<Arbitro> arbitros = new ArrayList<>();
 
+    /**
+     * Obtém a lista de árbitros registrados no sistema.
+     *
+     * @return A lista de árbitros registrados
+     */
     public static List<Arbitro> getArbitros() {
         return arbitros;
     }
- 
+    
+    /**
+     * Verifica se um árbitro está associado a algum torneio.
+     *
+     * @param arbitro O árbitro a ser verificado
+     * @return true se o árbitro estiver associado a um torneio, caso contrário false
+     */
     public static boolean arbitroEstaEmTorneio(Arbitro arbitro) {
-        // Verifica se o árbitro está presente no mainBracket ou no losersBracket de algum torneio
         for (Torneio torneio : GerirTorneios.getTorneios()) {
             if (torneio.getArbitros().contains(arbitro)) {
-                return true; // O árbitro está em algum torneio
+                return true;
             }
         }
-        return false; // O árbitro não está em nenhum torneio
+        return false; 
     }
     
-    
+    /**
+     * Cria um novo árbitro com base nas informações fornecidas pelo utilizador.
+     */
     public static void criarArbitro() {
         Scanner scanner = new Scanner(System.in);
         System.out.println();
         System.out.print("Insira o nome do Arbitro: ");
         String nome = scanner.nextLine();
-  // Limpar o buffer do scanner
  
         List<Desporto> desportos = new ArrayList<>();
         boolean continuar = true;
@@ -65,7 +81,12 @@ public class GerirArbitros {
         Arbitro Arbitro = new Arbitro(nome, desportos, 0);
         arbitros.add(Arbitro);
     }
- 
+
+    /**
+     * Modifica um árbitro existente no sistema.
+     *
+     * @param scanner O scanner utilizado para ler as entradas do utilizador
+     */
     public static void modificarArbitro(Scanner scanner) {
         if (arbitros.isEmpty()) {
             System.out.println();
@@ -87,12 +108,11 @@ public class GerirArbitros {
  
             if (input.equalsIgnoreCase("voltar")) {
                 System.out.println("Operaçao cancelada.");
-                return; // Voltar ao menu anterior
+                return; 
             }
  
             try {
                 int id = Integer.parseInt(input);
-                // Verificar se o Arbitro com o ID especificado existe
                 boolean arbitroEncontrado = false;
                 for (Arbitro Arbitro : arbitros) {
                     if (Arbitro.getId() == id) {
@@ -100,7 +120,7 @@ public class GerirArbitros {
 
                         if (arbitroEstaEmTorneio(Arbitro)) {
                             System.out.println("Este árbitro está associado a um torneio e não pode ser modificado.");
-                            return; // Sai do método sem modificar o árbitro
+                            return; 
                         }
 
                         System.out.println();
@@ -142,7 +162,7 @@ public class GerirArbitros {
  
                         Arbitro.setNome(nome);
                         System.out.println("Arbitro modificado com sucesso.");
-                        return; // Sai do método após modificar o Arbitro
+                        return; 
                     }
                 }
  
@@ -155,6 +175,11 @@ public class GerirArbitros {
         }
     }
  
+    /**
+     * Apaga um árbitro existente no sistema.
+     *
+     * @param scanner O scanner utilizado para ler as entradas do utilizador
+     */
     public static void apagarArbitro(Scanner scanner) {
  
         if (arbitros.isEmpty()) {
@@ -176,18 +201,17 @@ public class GerirArbitros {
            
             if (input.equalsIgnoreCase("voltar")) {
                 System.out.println("Operaçao cancelada.");
-                return; // Voltar ao menu anterior
+                return; 
             }
            
             try {
                 int id = Integer.parseInt(input);
-                // Verificar se o Arbitro com o ID especificado existe
                 for (int i = 0; i < arbitros.size(); i++) {
                     if (arbitros.get(i).getId() == id) {
 
                         if (arbitroEstaEmTorneio(arbitros.get(i))) {
                             System.out.println("Este árbitro está associado a um torneio e não pode ser apagado.");
-                            return; // Sai do método sem apagar o árbitro
+                            return; 
                         }
 
                         System.out.println("Tem certeza que deseja apagar o Arbitro '" + arbitros.get(i).getNome() + "'? (s/n)");
@@ -198,10 +222,9 @@ public class GerirArbitros {
                         } else {
                             System.out.println("Operaçao cancelada. O Arbitro nao foi removido.");
                         }
-                        return; // Sai do método após apagar ou cancelar a operaçao
+                        return; 
                     }
                 }
-                // Se o Arbitro com o ID especificado nao for encontrado
                 System.out.println("Arbitro nao encontrado.");
             } catch (NumberFormatException e) {
                 System.out.println("Por favor, insira um ID válido ou 'voltar'.");
@@ -209,6 +232,9 @@ public class GerirArbitros {
         }
     }
    
+    /**
+     * Mostra todos os árbitros registrados no sistema.
+     */
     public static void mostrarTodosArbitros() {
         if (arbitros.isEmpty()) {
             System.out.println();
@@ -224,7 +250,11 @@ public class GerirArbitros {
         }
     }
    
- 
+    /**
+     * Mostra os árbitros que podem arbitrar um desporto específico.
+     *
+     * @param scanner O scanner utilizado para ler as entradas do utilizador
+     */
     public static void mostrarArbitrosPorDesporto(Scanner scanner) {
         System.out.println();
         System.out.println("Desportos existentes:");
@@ -236,7 +266,6 @@ public class GerirArbitros {
         String desportoInput = scanner.nextLine().toUpperCase();
         Desporto desportoDesejado = null;
  
-        // Verificar se o desporto inserido existe
         for (Desporto d : Desporto.values()) {
             if (desportoInput.equals(d.name())) {
                 desportoDesejado = d;
@@ -244,7 +273,6 @@ public class GerirArbitros {
             }
         }
  
-        // Se o desporto existir, mostrar arbitros que praticam esse desporto
         if (desportoDesejado != null) {
             boolean encontrouArbitros = false;
             System.out.println();
@@ -265,8 +293,11 @@ public class GerirArbitros {
         }
     }
 
+    /**
+     * Cria árbitros a partir de um arquivo.
+     */
     public static void criarArbitrosFromFile() {
-        String fileName = "arbitros.txt"; // Nome do arquivo dos árbitros
+        String fileName = "arbitros.txt"; 
 
         try {
             File file = new File(fileName);
@@ -276,17 +307,14 @@ public class GerirArbitros {
                 String line = scanner.nextLine();
                 String[] tokens = line.split(" ");
 
-                // Primeiro token é o nome do árbitro
                 String nome = tokens[0];
 
-                // Restante dos tokens são os desportos do árbitro
                 List<Desporto> desportos = new ArrayList<>();
                 for (int i = 1; i < tokens.length; i++) {
                     Desporto desporto = Desporto.valueOf(tokens[i].toUpperCase());
                     desportos.add(desporto);
                 }
 
-                // Cria o árbitro com as informações lidas e adiciona à lista de árbitros
                 Arbitro arbitro = new Arbitro(nome, desportos, 0);
                 arbitros.add(arbitro);
             }

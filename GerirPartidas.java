@@ -2,16 +2,39 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.ArrayList;
 
+/**
+ * @author 84152 Francisco Picoito
+ * @author 55301 Diogo Marques
+ * @author 79256 Afonso Santos
+ */
 public class GerirPartidas {
     
-    public static void criarPartida(Torneio torneio) {
-        List<Jogador> mainBracketCopy = new ArrayList<>(torneio.getMainBracket()); // Cópia da lista mainBracket
-        List<Arbitro> arbitros = torneio.getArbitros();
-        int numeroPartidas = mainBracketCopy.size() / 2;
-        int indiceArbitro = 0; // Índice para rastrear a posição atual na lista de árbitros
-    
-        // Verificar se há apenas um jogador no mainBracket
-        if (mainBracketCopy.size() == 1) {
+    /**
+     * Cria uma nova partida para um torneio especificado.
+     *
+     * @param torneio O torneio para o qual a partida será criada
+     * @param scanner O scanner utilizado para ler as entradas do utilizador
+     */
+    public static void criarPartida(Torneio torneio, Scanner scanner) {
+        List<Jogador> mainBracketCopy = new ArrayList<>(torneio.getMainBracket());
+    List<Jogador> losersBracketCopy = new ArrayList<>(torneio.getLosersBracket());
+    List<Arbitro> arbitros = torneio.getArbitros();
+    int numeroPartidas = mainBracketCopy.size() / 2;
+    int indiceArbitro = 0;
+
+    if (torneio.getMainBracket().size() == 1 && torneio.getLosersBracket().size() == 1) {
+        Jogador jogadorMain = torneio.getMainBracket().get(0);
+        Jogador jogadorLosers = torneio.getLosersBracket().get(0);
+
+        Arbitro arbitro = torneio.getArbitros().get(0); 
+        Partida partida = new Partida(torneio, jogadorMain, jogadorLosers, arbitro, 0, 0);
+        torneio.getPartidas().add(partida);
+
+        System.out.println("Partida criada: " + jogadorMain.getNome() + " vs " + jogadorLosers.getNome() + " com o árbitro " + arbitro.getNome());
+
+        return;
+    }
+        if (mainBracketCopy.size() == 1 && losersBracketCopy.isEmpty()) {
             Jogador vencedor = mainBracketCopy.get(0);
             System.out.println("\nVencedor do torneio é " + vencedor.getNome());
             torneio.removerMainBracket(vencedor);
@@ -21,7 +44,6 @@ public class GerirPartidas {
     
         for (int i = 0; i < numeroPartidas; i++) {
             if (mainBracketCopy.size() < 2 || indiceArbitro >= arbitros.size()) {
-                // Se não houver jogadores suficientes ou árbitros, pare de criar partidas
                 break;
             }
     
@@ -29,7 +51,6 @@ public class GerirPartidas {
             Jogador jogador2 = mainBracketCopy.remove(0);
             Arbitro arbitro = arbitros.get(indiceArbitro);
     
-            // Incrementar o número de jogos do árbitro
             arbitro.setJogos(arbitro.getJogos() + 1);
     
             Partida partida = new Partida(torneio, jogador1, jogador2, arbitro, 0, 0);
@@ -37,7 +58,31 @@ public class GerirPartidas {
     
             System.out.println("Partida criada: " + jogador1.getNome() + " vs " + jogador2.getNome() + " com o árbitro " + arbitro.getNome());
     
-            // Incrementar o índice do árbitro e voltar ao início da lista, se necessário
+            indiceArbitro++;
+            if (indiceArbitro >= arbitros.size()) {
+                indiceArbitro = 0;
+            }
+        }
+    
+        numeroPartidas = losersBracketCopy.size() / 2; 
+        indiceArbitro = 0; 
+    
+        for (int i = 0; i < numeroPartidas; i++) {
+            if (losersBracketCopy.size() < 2 || indiceArbitro >= arbitros.size()) {
+                break;
+            }
+    
+            Jogador jogador1 = losersBracketCopy.remove(0);
+            Jogador jogador2 = losersBracketCopy.remove(0);
+            Arbitro arbitro = arbitros.get(indiceArbitro);
+    
+            arbitro.setJogos(arbitro.getJogos() + 1);
+    
+            Partida partida = new Partida(torneio, jogador1, jogador2, arbitro, 0, 0);
+            torneio.getPartidas().add(partida);
+    
+            System.out.println("Partida criada: " + jogador1.getNome() + " vs " + jogador2.getNome() + " com o árbitro " + arbitro.getNome());
+    
             indiceArbitro++;
             if (indiceArbitro >= arbitros.size()) {
                 indiceArbitro = 0;
@@ -49,52 +94,48 @@ public class GerirPartidas {
     
     
     
-    
+    /**
+     * Registra as pontuações de todas as partidas de um torneio selecionado.
+     *
+     * @param scanner O scanner utilizado para ler as entradas do utilizador
+     */
     public static void registrarPontosDaPartida(Scanner scanner) {
-        // Obter lista de torneios disponíveis
         List<Torneio> torneios = GerirTorneios.getTorneios();
-        List<Torneio> torneiosValidos = new ArrayList<>(); // Lista para armazenar os torneios válidos
+        List<Torneio> torneiosValidos = new ArrayList<>(); 
     
-        // Filtrar os torneios válidos (aqueles com mais de um participante no mainBracket)
         for (Torneio torneio : torneios) {
-            if (torneio.getMainBracket().size() > 1) {
+            if (torneio.getMainBracket().size() > 0) {
                 torneiosValidos.add(torneio);
             }
         }
     
-        // Verificar se há torneios válidos para escolha
         if (torneiosValidos.isEmpty()) {
             System.out.println("Não há torneios com mais de um participante para registrar pontuações.");
             return;
         }
     
-        // Exibir os torneios disponíveis para registro de pontuações
         System.out.println("Escolha o torneio para o qual deseja registrar os pontos:");
         for (int i = 0; i < torneiosValidos.size(); i++) {
             System.out.println((i + 1) + ". " + torneiosValidos.get(i).getDesporto() + " - " + torneiosValidos.get(i).getData());
         }
     
-        // Solicitar ao usuário que insira o número do torneio escolhido
         System.out.print("Insira o número do torneio: ");
         int numeroTorneio;
         while (true) {
-            // Verificar se a entrada é um número inteiro
             if (scanner.hasNextInt()) {
                 numeroTorneio = scanner.nextInt();
                 break;
             } else {
                 System.out.println("Entrada inválida. Insira um número inteiro.");
-                scanner.next(); // Limpar o buffer do scanner
+                scanner.next(); 
             }
         }
     
-        // Verificar se o número do torneio está dentro do intervalo válido
         if (numeroTorneio < 1 || numeroTorneio > torneiosValidos.size()) {
             System.out.println("Número de torneio inválido.");
             return;
         }
     
-        // Obter o torneio escolhido com base no número inserido
         Torneio torneio = torneiosValidos.get(numeroTorneio - 1);
     
         List<Partida> partidas = torneio.getPartidas();
@@ -103,9 +144,9 @@ public class GerirPartidas {
             System.out.println("Não há partidas para registrar pontuações neste torneio.");
             return;
         }
+        
     
         for (Partida partida : partidas) {
-            // Verificar se as pontuações são ambas zero
             if (partida.getJogador1Pontuacao() == 0 && partida.getJogador2Pontuacao() == 0) {
                 while (true) {
                     System.out.println("\nTorneio: " + torneio.getDesporto());
@@ -114,14 +155,13 @@ public class GerirPartidas {
     
                     int pontuacaoJogador1;
                     while (true) {
-                        // Verificar se a entrada é um número inteiro
                         System.out.print("Pontuação de " + partida.getJogador1().getNome() + ": ");
                         if (scanner.hasNextInt()) {
                             pontuacaoJogador1 = scanner.nextInt();
                             break;
                         } else {
                             System.out.println("Entrada inválida. Insira um número inteiro.");
-                            scanner.next(); // Limpar o buffer do scanner
+                            scanner.next(); 
                         }
                     }
                     partida.setJogador1Pontuacao(pontuacaoJogador1);
@@ -129,55 +169,105 @@ public class GerirPartidas {
     
                     int pontuacaoJogador2;
                     while (true) {
-                        // Verificar se a entrada é um número inteiro
                         System.out.print("Pontuação de " + partida.getJogador2().getNome() + ": ");
                         if (scanner.hasNextInt()) {
                             pontuacaoJogador2 = scanner.nextInt();
                             break;
                         } else {
                             System.out.println("Entrada inválida. Insira um número inteiro.");
-                            scanner.next(); // Limpar o buffer do scanner
+                            scanner.next(); 
                         }
                     }
                     partida.setJogador2Pontuacao(pontuacaoJogador2);
                     scanner.nextLine();
-    
-                    // Determinar o vencedor com base na pontuação
+                    
+                    if (torneio.getMainBracket().size() == 1 && torneio.getLosersBracket().size() == 1) {
+                        if (pontuacaoJogador2 > pontuacaoJogador1) {
+                            Jogador perdedor = partida.getJogador1();
+                            Jogador vencedor = partida.getJogador2();
+                            torneio.removerLosersBracket(vencedor); 
+                            torneio.adicionarMainBracket(vencedor); 
+                            partida.getJogador2().setVitorias(partida.getJogador2().getVitorias() + 1);
+                            partida.getJogador1().setDerrotas(partida.getJogador1().getDerrotas() + 1);
+                        } else if (pontuacaoJogador1 > pontuacaoJogador2) {
+                            Jogador perdedor = partida.getJogador2();
+                            Jogador vencedor = partida.getJogador1();
+                            torneio.removerLosersBracket(perdedor); 
+                            torneio.setVencedor(vencedor); 
+                            partida.getJogador1().setVitorias(partida.getJogador1().getVitorias() + 1);
+                            partida.getJogador2().setDerrotas(partida.getJogador2().getDerrotas() + 1);
+                        }
+                    } else {
+                        if (torneio.getTipo().equals("DoubleKnockout") && torneio.getMainBracket().size() == 2 && torneio.getLosersBracket().isEmpty()) {
+                            if (pontuacaoJogador2 > pontuacaoJogador1) {
+                                Jogador perdedor = partida.getJogador1();
+                                Jogador vencedor = partida.getJogador2();
+                                torneio.removerMainBracket(perdedor);
+                                torneio.setVencedor(vencedor); 
+                                partida.getJogador2().setVitorias(partida.getJogador2().getVitorias() + 1);
+                                partida.getJogador1().setDerrotas(partida.getJogador1().getDerrotas() + 1);
+                            } else if (pontuacaoJogador1 > pontuacaoJogador2) {
+                                Jogador perdedor = partida.getJogador2();
+                                Jogador vencedor = partida.getJogador1();
+                                torneio.removerMainBracket(perdedor);
+                                torneio.setVencedor(vencedor); 
+                                partida.getJogador1().setVitorias(partida.getJogador1().getVitorias() + 1);
+                                partida.getJogador2().setDerrotas(partida.getJogador2().getDerrotas() + 1);
+                            }
+                        } else {
                     Jogador vencedor = null;
                     if (pontuacaoJogador1 > pontuacaoJogador2) {
                         vencedor = partida.getJogador1();
-                        // Incrementar vitórias do jogador 1 e derrotas do jogador 2
                         vencedor.setVitorias(vencedor.getVitorias() + 1);
                         partida.getJogador2().setDerrotas(partida.getJogador2().getDerrotas() + 1);
                     } else if (pontuacaoJogador2 > pontuacaoJogador1) {
                         vencedor = partida.getJogador2();
-                        // Incrementar vitórias do jogador 2 e derrotas do jogador 1
+                        
                         vencedor.setVitorias(vencedor.getVitorias() + 1);
                         partida.getJogador1().setDerrotas(partida.getJogador1().getDerrotas() + 1);
                     } else {
                         System.out.println("A partida terminou em empate. Por favor, registre novamente os pontos.");
-                        continue; // Voltar ao início do loop para registrar os pontos novamente
+                        continue; 
                     }
     
-                    // Remover o jogador perdedor do torneio
                     if (vencedor != null) {
                         System.out.println("O jogador " + vencedor.getNome() + " venceu a partida.");
                         if (torneio.getTipo().equals("DoubleKnockout")) {
                             Jogador perdedor = (vencedor == partida.getJogador1()) ? partida.getJogador2() : partida.getJogador1();
-                            torneio.removerMainBracket(perdedor);
-                            torneio.adicionarLosersBracket(perdedor); // Adiciona o perdedor ao losersBracket
+                            if (torneio.getLosersBracket().contains(perdedor)) {
+                                torneio.removerLosersBracket(perdedor); 
+                            } else {
+                                torneio.removerMainBracket(perdedor);
+                                torneio.adicionarLosersBracket(perdedor); 
+                            }
                         } else {
+                            if (torneio.getMainBracket().size() == 2 && torneio.getLosersBracket().isEmpty()) {
+                                Jogador perdedor = (vencedor == partida.getJogador1()) ? partida.getJogador2() : partida.getJogador1();
+                                torneio.removerMainBracket(perdedor);
+                                torneio.setVencedor(vencedor);
+                            } else{
                             Jogador perdedor = (vencedor == partida.getJogador1()) ? partida.getJogador2() : partida.getJogador1();
                             torneio.removerMainBracket(perdedor);
                         }
+                    }
+            
                     } else {
                         System.out.println("A partida terminou em empate.");
                     }
-    
-                    break; // Sai do loop quando os pontos são registrados corretamente
+                    }
+                }
+                    break; 
                 }
             }
         }
+    
+        if (torneio.getTipo().equals("DoubleKnockout") && torneio.getMainBracket().size() == 2 && torneio.getLosersBracket().isEmpty() && torneio.getVencedor() != null) {
+
+        } else {
+            criarPartida(torneio, scanner);
+            return;
+        }
+    
     }
-}
-        
+}    
+    

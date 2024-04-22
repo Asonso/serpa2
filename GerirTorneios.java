@@ -16,21 +16,30 @@ import java.io.File;
 import java.io.FileNotFoundException; 
 import java.util.Collections;
 
- 
- 
+/**
+ * @author 84152 Francisco Picoito
+ * @author 55301 Diogo Marques
+ * @author 79256 Afonso Santos
+ */ 
  public class GerirTorneios {
      private static List<Torneio> torneios = new ArrayList<>();
      private static int contadorTorneios = 0;
     
-    
+    /**
+     *  Obtém lista de torneios existentes
+     * 
+     * @return lista de torneios existentes
+     */
     public static List<Torneio> getTorneios() {
         return torneios;
     }
 
-     /**
-      * Apaga um torneio da lista de torneios.
-      */
-      public static void apagarTorneios(Scanner scanner) {
+    /**
+     * Apaga torneios do sistema.
+     *
+     * @param scanner O scanner é utilizado para ler as entradas do utilizador
+     */
+    public static void apagarTorneios(Scanner scanner) {
 
         if (torneios.isEmpty()) {
             System.out.println("\nNao existem torneios para apagar.");
@@ -48,12 +57,11 @@ import java.util.Collections;
             
             if (input.equalsIgnoreCase("voltar")) {
                 System.out.println("Operaçao cancelada.");
-                return; // Voltar ao menu anterior
+                return; 
             }
         
             try {
                 int id = Integer.parseInt(input);
-                // Verificar se o jogador com o ID especificado existe
                 for (int i = 0; i < torneios.size(); i++) {
                     if (torneios.get(i).getId() == id) {
                         System.out.println("Tem certeza que deseja apagar o torneio '" + torneios.get(i).getDesporto() + ", " + torneios.get(i).getData() + "'? (s/n)");
@@ -64,10 +72,9 @@ import java.util.Collections;
                         } else {
                             System.out.println("Operaçao cancelada. O torneio nao foi removido.");
                         }
-                        return; // Sai do método após apagar ou cancelar a operaçao
+                        return; 
                     }
                 }
-                // Se o jogador com o ID especificado nao for encontrado
                 System.out.println("Torneio nao encontrado.");
             } catch (NumberFormatException e) {
                 System.out.println("Por favor, insira um ID válido ou 'voltar'.");
@@ -135,7 +142,6 @@ import java.util.Collections;
         }
 
         
-        // Verificar se o número de jogadores disponíveis é menor ou igual ao número de participantes do torneio
         if (jogadoresDisponiveis < numeroParticipantes) {
             System.out.println("Nao há jogadores suficientes com o desporto selecionado para o número de participantes especificado. A operaçao foi cancelada.");
             return;
@@ -148,7 +154,6 @@ import java.util.Collections;
             }
         }
 
-        // Verificar se o número de árbitros disponíveis é menor ou igual ao número de árbitros necessários para o torneio
         if (arbitrosDisponiveis < 2) {
             System.out.println("Não há árbitros suficientes com o desporto selecionado para o torneio. A operação foi cancelada.");
             return;
@@ -159,9 +164,8 @@ import java.util.Collections;
         
         List<Jogador> losersBracket = new ArrayList<>();
         List<Jogador> mainBracket = new ArrayList<>();
-        scanner.nextLine(); // Limpar o buffer do scanner
+        scanner.nextLine(); 
 
-        // Selecionar jogadores da lista existente
         if (!GerirJogadores.getJogadores().isEmpty()) {
             System.out.println("\nLista de jogadores disponíveis para o desporto " + desporto + ":");
             for (Jogador jogador : GerirJogadores.getJogadores()) {
@@ -179,16 +183,14 @@ import java.util.Collections;
                         System.out.print("\nInsira o ID do jogador " + (i + 1) + ": ");
                         id = scanner.nextInt();
         
-                        final int finalId = id; // Variável final para usar na expressao lambda
+                        final int finalId = id; 
         
-                        // Verifica se o jogador já foi selecionado anteriormente
                         boolean idRepetido = mainBracket.stream().anyMatch(jogador -> jogador.getId() == finalId);
                         if (idRepetido) {
                             System.out.println("Este jogador já foi selecionado para uma posiçao anterior. Por favor, insira um ID válido.");
-                            continue; // Pula para a próxima iteraçao do loop while
+                            continue; 
                         }
         
-                        // Verifica se o ID está na lista de jogadores e se o desporto do jogador corresponde ao desporto do torneio
                         idValido = GerirJogadores.getJogadores().stream().anyMatch(jogador -> jogador.getId() == finalId && jogador.getDesportos().contains(desporto));
         
                         if (!idValido) {
@@ -196,11 +198,10 @@ import java.util.Collections;
                         }
                     } catch (InputMismatchException e) {
                         System.out.println("Entrada inválida. Por favor, insira um número.");
-                        scanner.nextLine(); // Limpar o buffer do scanner
+                        scanner.nextLine(); 
                     }
                 }
         
-                // Adiciona o jogador correspondente ao ID à lista de jogadores do torneio
                 for (Jogador jogador : GerirJogadores.getJogadores()) {
                     if (jogador.getId() == id) {
                         mainBracket.add(jogador);
@@ -232,16 +233,14 @@ import java.util.Collections;
                     System.out.print("\nInsira o ID do árbitro " + (i + 1) + ": ");
                     id = scanner.nextInt();
 
-                    final int finalId = id; // Variável final para usar na expressão lambda
+                    final int finalId = id; 
 
-                    // Verifica se o árbitro já foi selecionado anteriormente
                     boolean idRepetido = arbitros.stream().anyMatch(arbitro -> arbitro.getId() == finalId);
                     if (idRepetido) {
                         System.out.println("Este árbitro já foi selecionado para uma posição anterior. Por favor, insira um ID válido.");
-                        continue; // Pula para a próxima iteração do loop while
+                        continue; 
                     }
 
-                    // Verifica se o ID está na lista de árbitros e se o desporto do árbitro corresponde ao desporto do torneio
                     idValido = GerirArbitros.getArbitros().stream().anyMatch(arbitro -> arbitro.getId() == finalId && arbitro.getDesportos().contains(desporto));
 
                     if (!idValido) {
@@ -249,11 +248,10 @@ import java.util.Collections;
                     }
                 } catch (InputMismatchException e) {
                     System.out.println("Entrada inválida. Por favor, insira um número.");
-                    scanner.nextLine(); // Limpar o buffer do scanner
+                    scanner.nextLine(); 
                 }
             }
 
-            // Adiciona o árbitro correspondente ao ID à lista de árbitros do torneio
             for (Arbitro arbitro : GerirArbitros.getArbitros()) {
                 if (arbitro.getId() == id) {
                     arbitros.add(arbitro);
@@ -269,14 +267,14 @@ import java.util.Collections;
 
         Collections.shuffle(mainBracket);
         if (tipoTorneio == 1) {
-            novoTorneio = new Torneio(desporto.toString(), data, local, numeroParticipantes, "Knockout", mainBracket, losersBracket, arbitros, partidas);
+            novoTorneio = new Torneio(desporto.toString(), data, local, numeroParticipantes, "Knockout", mainBracket, losersBracket, arbitros, partidas, null);
             torneios.add(novoTorneio);
         } else if (tipoTorneio == 2) {
-            novoTorneio = new Torneio(desporto.toString(), data, local, numeroParticipantes, "DoubleKnockout", mainBracket, losersBracket, arbitros, partidas);
+            novoTorneio = new Torneio(desporto.toString(), data, local, numeroParticipantes, "DoubleKnockout", mainBracket, losersBracket, arbitros, partidas, null);
             torneios.add(novoTorneio);
         }
 
-        GerirPartidas.criarPartida(novoTorneio);
+        GerirPartidas.criarPartida(novoTorneio, scanner);
     }
      /**
       * Mostra os detalhes dos torneios armazenados no sistema, permitindo ao utilizador escolher se deseja mostrar todos os torneios ou apenas um específico.
@@ -317,8 +315,8 @@ import java.util.Collections;
                     }
                 } catch (InputMismatchException e) {
                     System.out.println("Insira um ID válido de torneio.");
-                    scanner.nextLine(); // Limpa o buffer do scanner
-                    numeroTorneio = -1; // Força o loop a continuar pedindo uma entrada válida
+                    scanner.nextLine();
+                    numeroTorneio = -1;
                 }
             } while (numeroTorneio < 1 || numeroTorneio > torneios.size());
     
@@ -354,6 +352,7 @@ import java.util.Collections;
             Jogador jogador = torneio.getMainBracket().get(i);
             System.out.println((i + 1) + ". " + jogador.getNome() + " - Número: " + jogador.getNumero());
         }
+
     
         if (torneio.getTipo().equals("DoubleKnockout")) {
             System.out.println("\nLosers Bracket:");
@@ -361,6 +360,18 @@ import java.util.Collections;
                 Jogador jogador = torneio.getLosersBracket().get(i);
                 System.out.println((i + 1) + ". " + jogador.getNome() + " - Número: " + jogador.getNumero());
             }
+        }
+
+        System.out.println("\nMain Bracket:");
+        for (int i = 0; i < torneio.getMainBracket().size(); i++) {
+            Jogador jogador = torneio.getMainBracket().get(i);
+            System.out.println((i + 1) + ". " + jogador.getNome() + " - Número: " + jogador.getNumero());
+        }
+
+        System.out.println("\nLosers Bracket:");
+        for (int i = 0; i < torneio.getLosersBracket().size(); i++) {
+            Jogador jogador = torneio.getLosersBracket().get(i);
+            System.out.println((i + 1) + ". " + jogador.getNome() + " - Número: " + jogador.getNumero());
         }
     
         System.out.println("\nPartidas:");
@@ -370,69 +381,23 @@ import java.util.Collections;
             System.out.println("Partida " + (i + 1) + ":");
             System.out.println("Jogador 1: " + partida.getJogador1().getNome() + " - Pontuação: " + partida.getJogador1Pontuacao());
             System.out.println("Jogador 2: " + partida.getJogador2().getNome() + " - Pontuação: " + partida.getJogador2Pontuacao());
-            System.out.println("Árbitro: " + partida.getArbitro().getNome());
+            System.out.println("Árbitro: " + partida.getArbitro().getNome() + "\n");
         }
+        
+
+        if (torneio.getVencedor() != null) {
+            System.out.println("Vencedor: " + torneio.getVencedor().getNome());
+        } else {
+            System.out.println("Vencedor ainda não determinado.");
+        }
+
+
+        
     }
     
-    
-    
-    
 
-    
-    
-    
 
-    // public static void carregarTorneiosDeArquivo() {
-    //     String nomeArquivo = "torneios.txt"; // Nome do arquivo a ser carregado
-    //     try {
-    //         File arquivo = new File(nomeArquivo);
-    //         Scanner leitor = new Scanner(arquivo);
 
-    //         while (leitor.hasNextLine()) {
-    //             String linha = leitor.nextLine();
-    //             String[] partes = linha.split(" ");
 
-    //             // Extrair os detalhes do torneio a partir da linha
-    //             String desporto = partes[0];
-    //             String data = partes[1];
-    //             String local = partes[2];
-    //             int numeroParticipantes = Integer.parseInt(partes[3]);
-    //             String tipo = partes[4]; // Knockout ou DoubleKnockout (dependendo do tipo de torneio)
-    //             // Aqui você pode continuar a extrair os dados conforme necessário
 
-    //             // Extrair IDs dos jogadores
-    //             List<Jogador> jogadores = new ArrayList<>();
-    //             for (int i = 5; i < 5 + numeroParticipantes; i++) {
-    //                 int idJogador = Integer.parseInt(partes[i]);
-    //                 // Aqui você deve buscar o jogador pelo ID e adicioná-lo à lista
-    //                 // jogadores.add(buscarJogadorPorID(idJogador));
-    //             }
-
-    //             // Extrair IDs dos árbitros
-    //             List<Arbitro> arbitros = new ArrayList<>();
-    //             for (int i = 5 + numeroParticipantes; i < partes.length; i++) {
-    //                 int idArbitro = Integer.parseInt(partes[i]);
-    //                 // Aqui você deve buscar o árbitro pelo ID e adicioná-lo à lista
-    //                 // arbitros.add(buscarArbitroPorID(idArbitro));
-    //             }
-
-    //             List<Jogador> losersBracket = new ArrayList<>();
-
-                            
-    //             List<Partida> partidas = new ArrayList<>();
-
-    //             Collections.shuffle(jogadores);
-    //             // Adicionar o novo torneio à lista de torneios
-    //             torneios.add(new Torneio(desporto, data, local, numeroParticipantes, tipo, jogadores, losersBracket, arbitros, partidas));
-    //         }
-
-    //         leitor.close();
-    //         System.out.println("Torneios carregados com sucesso do arquivo '" + nomeArquivo + "'.");
-    //     } catch (FileNotFoundException e) {
-    //         System.out.println("O arquivo '" + nomeArquivo + "' não foi encontrado.");
-    //     } catch (Exception e) {
-    //         System.out.println("Ocorreu um erro ao carregar os torneios do arquivo '" + nomeArquivo + "'.");
-    //         e.printStackTrace();
-    //     }
-    // }
 }
